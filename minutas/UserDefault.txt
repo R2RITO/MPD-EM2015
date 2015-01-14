@@ -1,0 +1,25 @@
+﻿Minuta 6
+
+Observaciones
+		x*Titulos con puntos quitar  (domios, efa parentesis)
+		x*Titulo poner HOspiutal.....
+		*Conceptual lista cadera detalle cadera (Falta general)
+		x*colocar una entidad por lamina para detallar los atributos
+		x*Diccionario por bloques 
+		*extencion de base de datos y no unipn
+		*Interfaz muy blanca
+		x*Mostrar errores 
+		*Esquema de app de sensibles con base de datos esta es mas particular
+
+	
+		*DOM_TAB table
+		*Esquema de Herencia
+		*completar linlabtab y definir los dominios
+		*lshow show de todos los dominios
+
+
+Enviar avances al dia 22 por correo
+
+Para la semana 8 Consultas ya funcionales con sqlplus y avance en integracion interfaz con las consultas y ingreso de nuevos datos
+		
+

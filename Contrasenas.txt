@@ -1,0 +1,7 @@
+LDC:
+	Usuario: root
+	Pass: c4d3n4sr00t
+
+BaseDatos:
+	User: SYSTEM
+	Pass: 19254844

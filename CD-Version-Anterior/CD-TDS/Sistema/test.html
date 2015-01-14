@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mi Plantilla Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/mystyle.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>  
+<!-- NAVBAR ================================================== -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <!-- Brand and toggle get grouped for better mobile display -->
+	  <div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+		  <span class="sr-only">Toggle navigation</span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="index.html"><span class="glyphicon glyphicon-home"></span></a>
+		
+	  </div>
+
+	  <!-- Collect the nav links, forms, and other content for toggling -->
+	  <div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav">
+		  <li><a href="#">Galería</a></li>
+		  <li><a href="#">Nosotros</a></li>
+		  <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Nuestros Productos <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  <li><a href="#">Producto 1</a></li>
+			  <li><a href="#">Producto 2</a></li>
+			  <li><a href="#">Producto 3</a></li>
+			  <li><a href="#">Producto 4</a></li>
+			</ul>
+		  </li>
+		</ul>
+
+		<ul class="nav navbar-nav navbar-right">
+		  <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Idioma <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+			  <li><a href="#">Español</a></li>
+			  <li><a href="#">English</a></li>
+			</ul>
+		  </li>
+		</ul>
+		<form class="navbar-form navbar-right" role="search">
+		  <div class="form-group">
+			<input type="text" class="form-control" placeholder="Buscar...">
+		  </div>
+		  <button type="submit" class="btn btn-default">Buscar</button>
+		</form>		
+	  </div><!-- /.navbar-collapse -->
+	</nav>  
+<!-- END NAVBAR ================================================== -->  
+
+<!-- Carousel ================================================== -->
+<div id="myCarousel" class="carousel slide">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+		<img src="image/5.jpg" alt="">
+	  <div class="carousel-caption">
+		<h1>El Paramo de la Culata.</h1>
+        <p>El Paramo de  la Culata es uno de los paisajes más hermosos de Venezuela.</p>
+        <p><a class="btn btn-large btn-default" href="#">Seguir</a></p>
+      </div>
+    </div>
+     <div class="item">
+      <img src="image/2.jpg" class="img-rounded" alt="">
+      <div class="carousel-caption">
+		<h1>La Laguna de Mucubaji.</h1>
+        <p> Es una de las más grandes de la región y está incluida en la lista de humedales Ramsar desde septiembre de 2007.</p>
+        <p><a class="btn btn-large btn-warning" href="#">Seguir</a></p>
+      </div>
+    </div>   
+     <div class="item">
+      <img src="image/11.jpg" class="img-rounded" alt="">
+      <div class="carousel-caption">
+		<h1>El Pico Bolívar.</h1>
+        <p>El pico Bolívar es el accidente geográfico más alto de Venezuela, alcanzando una altitud de 4978,4 msnm. Forma parte de la Sierra Nevada dentro del parque nacional homónimo en la Cordillera de Mérida.</p>
+        <p><a class="btn btn-large btn-primary" href="#">Seguir</a></p>
+      </div>
+    </div> 	
+  </div>
+
+  <!-- Controls -->
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="icon-prev"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="icon-next"></span></a>
+</div>
+
+<!-- END Carousel ================================================== -->
+
+<!-- solumns ================================================== -->
+<div class="row">
+  <div class="col-xs-12 col-md-8">
+	<div class="row">
+	  <div class="col-md-1"> </div>
+	  <div class="col-md-4">texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto </div>
+	  <div class="col-md-4">texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto texto </div>
+
+ 	</div>
+  </div>
+  <div class="col-xs-6 col-md-4">
+	<img src="image/circle.jpg" class="img-circle" width="300" height="250" ></img>
+  </div>
+</div>
+<!-- END Colums ================================================== -->
+
+<!-- Footer ================================================== -->
+<div class="panel-footer"><p class="text-center"> &copy; All Rights Reserve. Global Consults Group C.A.</p></div>
+<!-- END Footer ================================================== -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

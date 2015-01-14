@@ -1,0 +1,982 @@
+
+SQL*Plus: Release 11.2.0.2.0 Production on Sat Jan 18 12:19:45 2014
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+Connected.
+DROP PUBLIC SYNONYM "D_FLEXCAD"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "D_PESO"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "USER_TAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "USUARIOS"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "UDLINLAB_TAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "EFA_TAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DOMAIN_TAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "WREP_TAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "RESEMBLANCE_TAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "TRAPEZOID_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DOMAIN_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "CA_USERDEFAULT"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "USERDEFAULT"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "CA_LINLAB"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "CA_TRAP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ID_PER"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ID_DOMINIO"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "FUZZY_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "FUZZYSET_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "CONJUCTIVE_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ELEMENT_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "WR_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DT_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "RESEMBLANCE_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DF_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ELEMENTDF_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ELEMENTSET_OBJTYP"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DISPOSITIVOS_USADOS"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DISPOSITIVO"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "SEMEJANZA_ETIQUETAS"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ETIQUETA_CARAC_MARCHA"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "SEMEJANZA_FIJO_ETIQUETA"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ETIQUETA_TONO_MUSCULAR"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "D_TONO_MUSCULAR"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "PACIENTE"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "MEDICO"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ID_HISTORIALES"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "SEMEJANZA_ETIQUETAS_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DISPOSITIVOS_USADOS_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "SEMEJANZA_FIJO_ETIQUETA_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "ETIQUETA_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DOMINIO_FIJO_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "DOMINIO_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "PACIENTE_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "MEDICO_T"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "CA_SEM_FIJO_ETIQ"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "CA_SEM_ETIQUETA"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "SEM_FIJO_ETIQ"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+DROP PUBLIC SYNONYM "SEM_ETIQUETAS"
+                    *
+ERROR at line 1:
+ORA-01432: public synonym to be dropped does not exist
+
+
+SP2-0306: Invalid option.
+Usage: CONN[ECT] [{logon|/|proxy} [AS {SYSDBA|SYSOPER|SYSASM}] [edition=value]]
+where <logon> ::= <username>[/<password>][@<connect_identifier>]
+      <proxy> ::= <proxyuser>[<username>][/<password>][@<connect_identifier>]
+DROP TABLE EFA_tab
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE dispositivos_usados
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE dispositivo
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE semejanza_etiquetas
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE etiqueta_carac_marcha
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE semejanza_fijo_etiqueta
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE etiqueta_tono_muscular
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE D_Tono_Muscular
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE Paciente
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE Medico
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP SEQUENCE Id_Historiales
+              *
+ERROR at line 1:
+ORA-02289: sequence does not exist
+
+
+DROP SEQUENCE Id_Per
+              *
+ERROR at line 1:
+ORA-02289: sequence does not exist
+
+
+DROP SEQUENCE Id_dominio
+              *
+ERROR at line 1:
+ORA-02289: sequence does not exist
+
+
+DROP TABLE UDLinLab_tab
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE User_tab
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE Usuarios
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+DROP TABLE Domain_tab
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+Connected.
+
+Type dropped.
+
+
+Type dropped.
+
+DROP TYPE Trapezoid_objtyp FORCE
+*
+ERROR at line 1:
+ORA-04043: object TRAPEZOID_OBJTYP does not exist
+
+
+DROP TYPE DT_objtyp FORCE
+*
+ERROR at line 1:
+ORA-04043: object DT_OBJTYP does not exist
+
+
+DROP TYPE D_Peso FORCE
+*
+ERROR at line 1:
+ORA-04043: object D_PESO does not exist
+
+
+DROP TYPE semejanza_etiquetas_t
+*
+ERROR at line 1:
+ORA-04043: object SEMEJANZA_ETIQUETAS_T does not exist
+
+
+DROP TYPE dispositivos_usados_t
+*
+ERROR at line 1:
+ORA-04043: object DISPOSITIVOS_USADOS_T does not exist
+
+
+DROP TYPE semejanza_fijo_etiqueta_t
+*
+ERROR at line 1:
+ORA-04043: object SEMEJANZA_FIJO_ETIQUETA_T does not exist
+
+
+DROP TYPE etiqueta_t
+*
+ERROR at line 1:
+ORA-04043: object ETIQUETA_T does not exist
+
+
+DROP TYPE dominio_fijo_t
+*
+ERROR at line 1:
+ORA-04043: object DOMINIO_FIJO_T does not exist
+
+
+DROP TYPE dominio_t
+*
+ERROR at line 1:
+ORA-04043: object DOMINIO_T does not exist
+
+
+DROP TYPE Paciente_t
+*
+ERROR at line 1:
+ORA-04043: object PACIENTE_T does not exist
+
+
+DROP TYPE Medico_t
+*
+ERROR at line 1:
+ORA-04043: object MEDICO_T does not exist
+
+
+DROP PROCEDURE sem_fijo_etiq
+*
+ERROR at line 1:
+ORA-04043: object SEM_FIJO_ETIQ does not exist
+
+
+DROP PROCEDURE sem_etiquetas
+*
+ERROR at line 1:
+ORA-04043: object SEM_ETIQUETAS does not exist
+
+
+Connected.
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+
+Type created.
+
+Connected.
+CREATE SEQUENCE Id_Per
+                *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+CREATE SEQUENCE Id_Dominio
+                *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+CREATE TABLE User_tab OF UserDef_objtyp (
+                         *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE Usuarios OF UserDef_objtyp (
+                         *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE Domain_tab OF Fuzzy_objtyp (
+                           *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+  Trapezoid   Trapezoid_objtyp,
+              *
+ERROR at line 5:
+ORA-00902: invalid datatype
+
+
+CREATE SEQUENCE Id_Historiales
+                *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+CREATE TABLE Medico OF Medico_t(
+                       *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE Paciente OF Paciente_t(
+                         *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE D_Tono_Muscular OF dominio_fijo_t(
+                                *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE etiqueta_tono_muscular OF etiqueta_t(
+                                       *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE semejanza_fijo_etiqueta OF semejanza_fijo_etiqueta_t(
+                                        *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE etiqueta_carac_marcha OF etiqueta_t(
+                                      *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE semejanza_etiquetas OF semejanza_etiquetas_t (
+                                    *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE dispositivo OF etiqueta_t(
+                            *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+CREATE TABLE dispositivos_usados OF dispositivos_usados_t(
+                                    *
+ERROR at line 1:
+ORA-00902: invalid datatype
+
+
+  Peso		D_Peso,
+                *
+ERROR at line 7:
+ORA-00902: invalid datatype
+
+
+INSERT INTO Domain_tab VALUES ('Tono_Flexores_Dorsales_Der')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Domain_tab VALUES ('Tono_Flexores_Dorsales_Izq')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Domain_tab VALUES ('Carac_Marcha')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Domain_tab VALUES ('Peso')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Tono_Muscular Values (1,'Atonia')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Tono_Muscular Values (2,'Hipotonia')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Tono_Muscular Values (3,'Normotonia')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Tono_Muscular Values (4,'Hipertonia')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO D_Tono_Muscular Values (1,1)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO D_Tono_Muscular Values (2,2)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO D_Tono_Muscular Values (3,3)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO D_Tono_Muscular Values (4,4)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (1,'Normal')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (2,'Hemiplejica')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (3,'Ataxica')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (4,'Parkinsoniana')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (5,'Danzante')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (6,'Antialgica')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Etiqueta_Carac_Marcha Values (7,'Espastica')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Dispositivo Values (1, 'Muletas')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Dispositivo Values (2, 'Silla de ruedas')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Dispositivo Values (3, 'Baston')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+INSERT INTO Dispositivo Values (4, 'Andadera')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+
+Commit complete.
+
+
+Warning: Function created with compilation errors.
+
+
+Warning: Function created with compilation errors.
+
+
+Warning: Function created with compilation errors.
+
+
+Warning: Procedure created with compilation errors.
+
+Connected.
+
+Warning: Procedure created with compilation errors.
+
+
+Warning: Procedure created with compilation errors.
+
+Connected.
+
+Warning: Type Body created with compilation errors.
+
+
+Warning: Type Body created with compilation errors.
+
+
+Warning: Type Body created with compilation errors.
+
+Connected.
+
+Warning: Type Body created with compilation errors.
+
+
+Warning: Type Body created with compilation errors.
+
+
+Type body created.
+
+
+Warning: Type Body created with compilation errors.
+
+
+Warning: Type Body created with compilation errors.
+
+
+Warning: Procedure created with compilation errors.
+
+
+Warning: Procedure created with compilation errors.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+
+Synonym created.
+
+SQL> 
+SQL> Disconnected from Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production

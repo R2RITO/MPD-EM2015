@@ -1,0 +1,94 @@
+
+<?php
+/**
+ * Funcion que muestra los posibles errores al agregar un nuevo paciente.
+ */
+  session_start();
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Agregar Paciente</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/mystyle.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+<body>  
+ <!-- Barra Principal de Opciones -->
+ <nav class="navbar navbar-default navFondo" role="navigation">
+  <div class="navbar-header">
+    
+    <a class ="icon" href="perfil.html"><span class="glyphicon glyphicon-home"></span></a>
+    <a class ="icon selected" href="nuevoPaciente.php"><span class="glyphicon glyphicon-plus-sign"></span></a>
+    <a class ="icon" href="nuevoEFA.html"><span class="glyphicon glyphicon-folder-open"></span></a>
+    <a class ="icon" href="consultas.html" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-search"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="paciente.php">Paciente</a></li>
+					<li><a href="generales.php">Generales</a></li>
+          <li><a href="comparaciones.php">Comparaciones</a></li>
+				</ul>
+    <a class ="icon" href="consultaBorrarPaciente.php"><span class="glyphicon glyphicon-minus-sign"></span></a></li>	
+		<a class ="icon" href="cerrarSesion.php"><span class="glyphicon glyphicon-log-out"></span></a>    
+  </div>
+ </nav>
+ <!-- ================================================== -->
+ <!-- Consultar Paciente-->
+  <div>
+     <p class="titulo">Agregar Paciente</p>
+ </div>
+ <div class="">
+  <div class="trans">	
+	  <form role="form" action="validar_paciente.php">
+		  <div class="form-group">
+        <div class="errores">
+             <?php
+                  //echo $_SESSION['error'];
+                  //$un_error=unserialize(urldecode($_GET['error']));
+                  if (!empty($_GET['error1'])){
+                  
+                     //foreach ($_SESSION['error'] as $e){
+                             echo ($_GET['error1']);
+                             echo ($_GET['error2']);
+                             echo ($_GET['error3']);
+                             echo ($_GET['error4']);
+                             echo ($_GET['error5']);
+                             echo ($_GET['error6']);
+                     //}  
+                  }
+             ?>
+        </div>
+			<label for="exampleInputEmail1">Nombre</label>
+			<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Jane">
+			<label for="exampleInputEmail1">Apellido</label>
+			<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Doe">
+      <label for="exampleInputEmail1">Cedula</label>
+			<input type="text" class="form-control" id="cedula" name="cedula" placeholder="123456789">
+      <label for="exampleInputEmail1">Profesion</label>
+			<input type="text" class="form-control" id="profesion" name="profesion" placeholder="Estudiante">
+		  <label for="exampleInputEmail1">Lugar de Residencia</label>
+			<input type="text" class="form-control" id="residencia" name="residencia" placeholder="Caracas">
+      <label for="exampleInputEmail1">Fecha de Nacimiento</label>
+			<input type="text" class="form-control" id="nacimiento" name="nacimiento" placeholder="dd-mm-aaaa">
+      </div>
+		  <button type="submit" class="btn btn-warning btn-block" id="login" class="boton">Siguiente</button>
+		</form>
+  </div>
+ </div>
+ 
+ <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+ <script src="js/jquery-1.10.2.min.js"></script>
+ <!-- Include all compiled plugins (below), or include individual files as needed -->
+ <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
+

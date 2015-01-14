@@ -1,0 +1,25 @@
+Para instalar la base de datos es necesario tener las funciones del administrador (SYSTEM). Modificar el archivo CreUser.sql, poniendo
+conn system / [password del administrador de la BD] y correr el script.sql colocando en sqlplus (luego de conectarnos como usuario):
+START script.sql
+
+Esto hara que automaticamente se creen todos los tipos, tablas, funciones y sinonimos necesarios para que la BD funcione.
+
+La Base de Datos contiene ciertos archivos importantes:
+
+-DropSyn.sql: Que elimina todos los sinonimos (SYNONIM), para asegurarse de crearlos nuevamente correctamente.
+-DropTab.sql: Que elimina todas las definiciones de tabla (TABLE) en la BD, para crearlas nuevamente correctamente.
+-DropTyp.sql: Elimina todos las definiciones de tipos (TYPES) en la BD.
+-droptrigger.sql: Elimina todos los procedimientos o triggers (PROCEDURE) creados anteriormente en la BD.
+-CreUser.sql: Crea una serie de usuarios nuevos en la BD, usaremos el nuevo usuario USERDEF con clave 1234 para trabajar en el sistema.
+-Cre_Typ.sql: Crea los distintos tipos de objeto para la BD, con sus atributos, metodos y otras propiedades en userdef.
+-CreTab.sql: Crea las distintas tablas en userdef.
+-InsertIni.sql: Inserta ciertos valores iniciales.
+-UserDefault.sql: Crea la funcion UserDefault.
+-CA_UserDefault.sql: Crea la funcion CA_UserDefault
+-CA_Trap.sql: Crea la funcion CA_Trap
+-CA_LinLab.sql: Crea el procedimiento CA_LinLab 
+-CA_Sem_Fijo_Etiq.sql: Crea el procedimiento CA_Sem_Fijo_Etiq 
+-CA_Types.sql: Crea los cuerpos de los tipos que se usaran.
+-CreBodTyp.sql: Crea los cuerpos de los tipos que se usaran.
+-trigger.sql: Define los triggers a usar.
+-CreSyn.sql: Crea los distintos Sinonimos
