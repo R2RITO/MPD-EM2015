@@ -1,0 +1,58 @@
+
+CONFIGURACIÓN DE BASE DE DATOS
+
+Ramón Marquez
+Esteban Oliveros
+Arturo Voltattorni
+
+La base de datos se divide en cuatro módulos:
+	- FDB[Fuzzy DataBase]: crea estructuras de manejo de datos
+	difusos, es decir, los diferentes tipos de dominios
+	difusos y los procesos almecenados relacionados a los mismos.
+	
+	- CTP[Computational Theory of Perception]: crea estructuras
+	y procesos que permiten el almacenamiento y recuperación
+	de los datos dependiendo del contexto actual.
+	
+	- CASS[Context Awareness Support System]: almacena el 
+	conocimiento contextual de la base de datos en forma de
+	catálogo, es decir, las dimensiones, dando soporte al CTP.
+	
+	- CAA[Context-aware application]: encargado de manejar lo 
+	relacionado a la aplicación	desarrollada para el Hospital 
+	Ortopédico Infantil. Depende de manera estructural de lo 
+	construido en los otros módulos.
+	
+Para la instalación de la base de datos proveemos los
+script necesarios para su ejecución. Es necesario mantener
+el orden inidicado. 
+
+Hemos diseñado las estructuras de manera tal que además de la
+aplicación del Hospital Ortopédico Infantil (HOI) puedan existir 
+otras aplicaciones que se puedan valer de los módulos de referentes 
+a contexto y dominios difusos.
+
+	CONFIGURAR FDB
+	
+	- Conectarse como SYSTEM
+	
+	CONFIGURAR CASS
+	
+	- Conectarse como SYSTEM
+
+	CONFIGURAR CTP
+	
+	- Conectarse como SYSTEM
+	
+	CONFIGURAR CAA
+	
+	Previo a la ejecución de los script y para mantener la
+	separación entre estructura y aplicación recomendamos
+	crear un usuario con las siguientes opciones:
+	
+	// AQUI PONER COMO CREAR USUARIO
+	
+	Entonces procedemos a ejecutar los scripts del CAA, en este
+	caso, del HOI:
+	
+	- Conectarse como el usuario creado previamente
