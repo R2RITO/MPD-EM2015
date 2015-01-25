@@ -1,4 +1,4 @@
-
+﻿
 CONFIGURACIÓN DE BASE DE DATOS
 
 Ramón Marquez
@@ -35,6 +35,8 @@ a contexto y dominios difusos.
 	CONFIGURAR FDB
 	
 	- Conectarse como SYSTEM
+	- Ejecutar el script FDB_Definicion.sql
+	- Ejecutar el script FDB_Implementacion.sql
 	
 	CONFIGURAR CASS
 	
