@@ -6,26 +6,7 @@
 	Ramón Marquez
 	Esteban Oliveros
 	Arturo Voltattorni
-	
-	Cambios respecto a versión anterior:
-	
-	- Renombrar
-		Fuzzy_objtyp 		---> DominioDifuso_TYP
-		Trapezoid_objtyp 	---> Trapezoide_TYP 
-			T_a		---> A
-			T_b		---> B
-			T_c		---> C
-			T_d		---> D
-		DT_objtyp			---> Continuo_TYP
-		
-	- Eliminar
-		* Funciones de DominioDifuso_TYP:
-			Las razones se encuentran en la implementación, ya que
-			solo retornan NULL. 
-			
-			
-	NOTA: 	Para lo indicado con * chequear que sea 
-			factible la modificación
+
 */
 
 CREATE OR REPLACE TYPE  DominioDifuso_TYP AS OBJECT (
@@ -64,3 +45,57 @@ CREATE OR REPLACE TYPE Continuo_TYP UNDER DominioDifuso_TYP (
 )
 NOT FINAL;
 /
+
+
+-- Segun original, esto corresponde a los dominios discretos
+
+CREATE OR REPLACE TYPE dominio_t AS OBJECT(
+   codigo NUMBER(4)
+) NOT INSTANTIABLE NOT FINAL;
+/
+
+CREATE OR REPLACE TYPE dominio_fijo_t UNDER dominio_t(
+   valor NUMBER(4,2),
+   CONSTRUCTOR FUNCTION dominio_fijo_t (dom IN VARCHAR2, et IN VARCHAR2, val IN NUMBER, grado IN NUMBER) RETURN SELF AS RESULT,
+   CONSTRUCTOR FUNCTION dominio_fijo_t (val IN NUMBER) RETURN SELF AS RESULT,
+   MEMBER FUNCTION FEQ (et in NUMBER) return real,
+   MEMBER FUNCTION FEQ (dom in VARCHAR2, et in VARCHAR2) return real
+);
+/
+
+CREATE OR REPLACE TYPE etiqueta_t UNDER dominio_t(
+   etiq VARCHAR2(50),
+   CONSTRUCTOR FUNCTION etiqueta_t (dom IN VARCHAR2, et1 IN VARCHAR2, et2 IN VARCHAR2, grado IN NUMBER) RETURN SELF AS RESULT,
+   CONSTRUCTOR FUNCTION etiqueta_t (et IN VARCHAR2) RETURN SELF AS RESULT,
+   MEMBER FUNCTION FEQ (dom in VARCHAR2, et in VARCHAR2) return real
+);
+/
+
+-- Según original no se indica a que corresponde. Sospecho que a los dominios categoricos
+CREATE OR REPLACE TYPE semejanza_fijo_etiqueta_t AS OBJECT(
+   usuario VARCHAR2(50),
+   dom_name VARCHAR2(50),
+   etiqueta VARCHAR(50),
+   dominio NUMBER(4,2),
+   grado NUMBER(4,2)
+);
+/
+
+CREATE OR REPLACE TYPE dispositivos_usados_t AS OBJECT(
+   paciente NUMBER(10),
+   ID_Historial NUMBER(10),
+   dispositivo VARCHAR2(50),
+   grado NUMBER(4,2)
+);
+/
+
+
+CREATE OR REPLACE TYPE semejanza_etiquetas_t AS OBJECT(
+   usuario VARCHAR2(50),
+   dom_name VARCHAR2(50),
+   etiqueta_1 VARCHAR2(50),
+   etiqueta_2 VARCHAR2(50),
+   grado NUMBER(4,2)
+);
+/
+

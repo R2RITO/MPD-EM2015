@@ -1,0 +1,43 @@
+
+CAMBIOS RESPECTO A VERSIÓN ANTERIOR
+
+	
+	- Renombrar
+		Fuzzy_objtyp 		---> DominioDifuso_TYP
+		Trapezoid_objtyp 	---> Trapezoide_TYP 
+			T_a		---> A
+			T_b		---> B
+			T_c		---> C
+			T_d		---> D
+		DT_objtyp			--->	Continuo_TYP
+		UDLinLab_tab 		--->  
+		[User
+		 Dimension
+		 Linguistic
+		 Label]
+		
+	- Eliminar
+		* Funciones de DominioDifuso_TYP:
+			Las razones se encuentran en la implementación, ya que
+			solo retornan NULL. 
+	
+	- Conceptual
+		UDLinLab_tab
+			Esta tabla almacena la definición de de etiquetas 
+			linguisticas para el contexto del usuario, junto
+			con el trapezoide correspondiente.
+			
+			Dado que queremos separar los aspectos de FDB de
+			los módulos de contexto debemos separarlos, y 
+			crear una tabla que almacene estas etiquetas sin
+			depender el contexto, pero que exista la relacion
+			en el CASS como se muestra en los diagramas.
+			
+	- Propuestas
+		Continuo_TYP 
+			Agregar atributo que indique el rango del dominio
+			y condiciones para que los trapezoides esten dentro
+			del rango. Además, atributo de escala de medición,
+			ej: kg, metros, años.
+			
+		Redefinir dominios Categóricos y Discretos

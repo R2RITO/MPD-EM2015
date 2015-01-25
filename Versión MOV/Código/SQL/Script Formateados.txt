@@ -1,0 +1,20 @@
+
+	CONTROL DE CAMBIOS
+
+	Muestra en donde pueden ser encontrados las definiciones de los script originales en los nuevos
+
+	SCRIPT				FORMATEADO TOTAL?		DISTRIBUIDO EN
+---------------------------------------------------------------------------------------------------------------------------
+
+Cre_Typ						SI			FDB_Definicion, CAA_Definicion, CAA_Definicion_Usuario
+CreTab						SI			FDB_Tablas, CAA_Tablas, CAA_Tablas_Usuarios
+InsertIni					SI			CAA_Insercion
+UserDefault					SI			CAA_Implementacion_Usuario
+CA_UserDefault					SI			CTP_Implementacion
+CA_Trap						SI			CTP_Implementacion
+CA_LinLab					SI			CTP_Implementacion
+CA_Sem_Fijo_Etiq				SI			CTP_Implementacion
+CA_Types					SI			FDB_Implementacion, CAA_Implmentacion_Usuario
+CreBodTyp					SI			FDB_Implementacion, CAA_Implmentacion_Usuario, CAA_Implmentacion
+trigger						SI			FDB_Tablas
+CreSyn						SI			Sinonimos
