@@ -1,43 +1,63 @@
 
 CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 
-	
+
 	- Renombrar
 		Fuzzy_objtyp 		---> DominioDifuso_TYP
-		Trapezoid_objtyp 	---> Trapezoide_TYP 
+		Trapezoid_objtyp 	---> Trapezoide_TYP
 			T_a		---> A
 			T_b		---> B
 			T_c		---> C
 			T_d		---> D
 		DT_objtyp			--->	Continuo_TYP
-		UDLinLab_tab 		--->  
+		UDLinLab_tab 		--->
 		[User
 		 Dimension
 		 Linguistic
 		 Label]
-		
+
 	- Eliminar
 		* Funciones de DominioDifuso_TYP:
 			Las razones se encuentran en la implementación, ya que
-			solo retornan NULL. 
-	
+			solo retornan NULL.
+
 	- Conceptual
 		UDLinLab_tab
-			Esta tabla almacena la definición de de etiquetas 
+			Esta tabla almacena la definición de de etiquetas
 			linguisticas para el contexto del usuario, junto
 			con el trapezoide correspondiente.
-			
+
 			Dado que queremos separar los aspectos de FDB de
-			los módulos de contexto debemos separarlos, y 
+			los módulos de contexto debemos separarlos, y
 			crear una tabla que almacene estas etiquetas sin
 			depender el contexto, pero que exista la relacion
 			en el CASS como se muestra en los diagramas.
-			
+
 	- Propuestas
-		Continuo_TYP 
+		Continuo_TYP
 			Agregar atributo que indique el rango del dominio
 			y condiciones para que los trapezoides esten dentro
 			del rango. Además, atributo de escala de medición,
 			ej: kg, metros, años.
-			
+
 		Redefinir dominios Categóricos y Discretos
+
+
+----------------------------------------------------------------
+
+Tabla mágica: donde va y que tiene :S
+¿Trataremos al usuario como contexto diferente? -> En caso de sí, el addContextDependency es tabla nueva, en CTP.
+
+
+Los atributos son fijos, reconsiderar la jerarquía.
+
+Cada vez que se llame al constructor de 4 parametros se creará un nuevo trapezoide?
+En el CA_LinLab actual esto no sucede, pero creo que debería.
+Esto sólo debe ser posible si se le asocian contextos diferentes (Ejemplo de WNL).
+En este caso se deben asociar los dominios de las dimensiones contextuales
+(pre operatorio y eso) al crear el trapezoide. Hasta ahora sólo se busca el usuario.
+
+ALERTA: El UDLinLab_Tab en FDB (que debería ser sólo fuzzy), tiene el usuario
+ahí metido, de hecho el usuario está atravesado en todas partes, problema
+principal: separar contexto (usuario y eso) de difusos, y dónde se une? es decir
+donde va tabla mágica?.

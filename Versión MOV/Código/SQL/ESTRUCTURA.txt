@@ -1,4 +1,4 @@
-
+﻿
 ESTRUCTURA DE BASE DE DATOS
 
 Ramón Marquez
@@ -6,56 +6,55 @@ Esteban Oliveros
 Arturo Voltattorni
 
 Users:
-	 Los datos ingresados por los usuarios y los recuperados 
-	 de las consultas pueden ser efectuados directamente por 
-	 los mismos a través de instrucciones del estándar SQL:99 
-	 o a través de aplicaciones sensibles al contexto 
-	 desarrolladas para usuarios inexpertos. 
-	 
-CTP Compliant Modules [COMPUTATIONAL THEORY OF PERCEPTION/CTP]: 
+	 Los datos ingresados por los usuarios y los recuperados
+	 de las consultas pueden ser efectuados directamente por
+	 los mismos a través de instrucciones del estándar SQL:99
+	 o a través de aplicaciones sensibles al contexto
+	 desarrolladas para usuarios inexpertos.
+
+CTP Compliant Modules [COMPUTATIONAL THEORY OF PERCEPTION/CTP]:
 	Consta de dos módulos sensibles al contexto:
 		- Context-aware Storage module (Almacenamiento) [CAS]
 		- COntext-aware Retrieval module (Recuperación) [CAR]
-	Estos son los encargados de comunicarse con el Context 
-	Awareness Support System para que sean afectadas las 
-	entradas (o salidas) de datos de acuerdo al contexto, 
-	antes de ser almacenados (o recuperados) los datos en 
-	(o de) la base de datos. 	
-	
-Context Awareness Support System [CASS]*: 
+	Estos son los encargados de comunicarse con el Context
+	Awareness Support System para que sean afectadas las
+	entradas (o salidas) de datos de acuerdo al contexto,
+	antes de ser almacenados (o recuperados) los datos en
+	(o de) la base de datos.
+
+Context Awareness Support System [CASS]*:
 	Aquí se almacena:
 		-Catalogo Contextual (metadatos contextuales)
 		-Histórico de las acciones de los usuarios
 		-Reglas de inferiencia respecto al cotexto
 	Los datos almacenados en este sistema pueden ser imperfectos
 	por lo cual se utilizará para su gestión el modelo de datos
-	difuso; estos datos constituyen una meta base de 
+	difuso; estos datos constituyen una meta base de
 	conocimiento contextual para que los CTP Compliant Modules
-	puedan actuar como agentes inteligentes y realizar la 
-	sensibilización al contexto de los datos almacenados o 
-	provenientes de la base de datos. 
-	En fin, este sistema se convierte en el “Experto” que 
-	permite a los CTP Compliant Modules hacer su trabajo de 
-	transformación.	
-	
+	puedan actuar como agentes inteligentes y realizar la
+	sensibilización al contexto de los datos almacenados o
+	provenientes de la base de datos.
+	En fin, este sistema se convierte en el “Experto” que
+	permite a los CTP Compliant Modules hacer su trabajo de
+	transformación.
+
 Base de Datos Difusas [FUZZY DATABSE/ FDB]*:
-	Es capaz de almacenar datos imperfectos siguiendo los postulados 
-	de la Teoría Computacional de Percepciones (CTP) de Zadeh, 
-	permitiendo la utilización de dominios difusos en los valores 
-	de los atributos de la base de datos, incorporando el uso de 
+	Es capaz de almacenar datos imperfectos siguiendo los postulados
+	de la Teoría Computacional de Percepciones (CTP) de Zadeh,
+	permitiendo la utilización de dominios difusos en los valores
+	de los atributos de la base de datos, incorporando el uso de
 	diferentes métodos (operadores difusos) para cada tipo de dominio.
-	
-Sensors, Agents: 
-	La arquitectura proveé la utilización de mecanismos de Computación 
-	Ubicua (UbiComp) para adquirir entradas proporcionadas por el 
-	ambiente, a través de la utilización de sensores ambientales o 
-	por medio de agentes que infieran el contexto de acuerdo a las 
-	actividades de las personas. Estos datos contextuales alimentan 
-	al Context Awareness Support System y pueden servir de insumo a 
-	Context-aware applications	 
-	
+
+Sensors, Agents:
+	La arquitectura proveé la utilización de mecanismos de Computación
+	Ubicua (UbiComp) para adquirir entradas proporcionadas por el
+	ambiente, a través de la utilización de sensores ambientales o
+	por medio de agentes que infieran el contexto de acuerdo a las
+	actividades de las personas. Estos datos contextuales alimentan
+	al Context Awareness Support System y pueden servir de insumo a
+	Context-aware applications
+
 Context-aware Application [CAA]:
 	La aplicación, que en este caso corresponde a la del HOI, que
-	utiliza la estructura anterior para el maejo de los datos
+	utiliza la estructura anterior para el manejo de los datos
 	y la información que proporciona al usuario.
-	
