@@ -1,3 +1,12 @@
+/*
+	CASS_Definicion
+
+	Ramón Marquez
+	Esteban Oliveros
+	Arturo Voltattorni
+
+*/
+
 CREATE OR REPLACE TYPE BODY D_Peso AS 
  
  CONSTRUCTOR FUNCTION D_Peso (Lab IN VARCHAR2, N1 IN NUMBER, N2 IN NUMBER, N3 IN NUMBER, N4 IN NUMBER) RETURN SELF AS RESULT IS

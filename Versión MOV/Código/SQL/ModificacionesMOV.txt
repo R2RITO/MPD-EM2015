@@ -1,4 +1,4 @@
-
+﻿
 CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 
 
@@ -9,8 +9,8 @@ CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 			T_b		---> B
 			T_c		---> C
 			T_d		---> D
-		DT_objtyp			--->	Continuo_TYP
-		UDLinLab_tab 		--->
+		DT_objtyp		---> Continuo_TYP
+		UDLinLab_tab 		---> CatalogoCtx_TAB	
 		[User
 		 Dimension
 		 Linguistic
@@ -22,7 +22,7 @@ CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 			solo retornan NULL.
 
 	- Conceptual
-		UDLinLab_tab
+		UDLinLab_tab --> CatalogoCtx_TAB
 			Esta tabla almacena la definición de de etiquetas
 			linguisticas para el contexto del usuario, junto
 			con el trapezoide correspondiente.
@@ -46,6 +46,7 @@ CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 ----------------------------------------------------------------
 
 Tabla mágica: donde va y que tiene :S
+
 ¿Trataremos al usuario como contexto diferente? -> En caso de sí, el addContextDependency es tabla nueva, en CTP.
 
 

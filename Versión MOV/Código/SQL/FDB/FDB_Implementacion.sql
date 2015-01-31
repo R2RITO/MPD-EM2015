@@ -9,6 +9,131 @@
 	
 */
 
+CREATE OR REPLACE TYPE BODY Trapezoide_TYP AS 
+	
+	-- NOTA ESTEBAN: Creo que esto deberia pasarse a CTP, ya que CAS hace este manejo
+	-- 				 no es propio de Trapezoide_TYP tener que ver si existe algo en CatalogoCtx_TAB
+	/* 
+		Dado el dominio y la etiqueta explicitamente, y 
+		el usuario y el contexto implicitamente buscamos
+		y devolvemos el trapezoide correspondiente
+	*/
+	CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN SELF AS RESULT IS
+		tupla CatalogoCtx_TAB%ROWTYPE;
+	  	trapezoide Trapezoide_TYP;
+	  	BEGIN
+	    	SELECT  * INTO tupla
+	   		FROM    CatalogoCtx_TAB
+	   		WHERE   usuario=user AND etiqueta=Etiqueta AND dominio=Dominio;
+	   		SELF:= tupla.trapezoide;
+	   		RETURN;
+	   		EXCEPTION WHEN NO_DATA_FOUND THEN
+		        SELF:= CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
+		        RETURN;
+	 	END;
+
+	CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Valor IN NUMBER) RETURN SELF AS RESULT IS
+ 		BEGIN
+    		SELF:= Trapezoide_TYP( Valor, Valor, Valor, Valor);
+    	RETURN;
+ 		END;
+
+	CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, NodoA IN NUMBER, NodoB IN NUMBER, NodoC IN NUMBER, NodoD IN NUMBER) RETURN SELF AS RESULT IS
+		CT_T Trapezoid_Objtyp;
+		BEGIN
+			CA_LinLab(Dominio, Etiqueta, User , NodoA, NodoB, NodoC, NodoD); -- Proceso para insertar en CatalogCtx_TAB
+			SELF:= Trapezoid_Objtyp(NodoA, NodoB, NodoC, NodoD);
+			RETURN;
+		END;
+  
+	MEMBER FUNCTION FEQT (T1 IN Trapezoide_TYP) RETURN REAL IS
+		FEQR  NUMBER (3,2); 
+		S_a   NUMBER(12,3);
+		S_b   NUMBER(12,3);
+		T1_a  NUMBER(12,3);
+		T1_b  NUMBER(12,3);
+		BEGIN
+			IF (SELF.T_a= 0 AND SELF.T_b= 0) THEN 
+				S_a:= SELF.T_c;
+				S_b:= SELF.T_c;
+			ELSE
+				S_a:= SELF.T_a;
+				S_b:= SELF.T_b;
+			END IF;
+			
+			IF (T1.T_a= 0 AND T1.T_b= 0) THEN 
+				T1_a:= T1.T_c;
+				T1_b:= T1.T_c;
+			ELSE
+				T1_a:= T1.T_a;
+				T1_b:= T1.T_b;
+			END IF;
+
+			IF (SELF.T_a= T1.T_a AND SELF.T_b = T1.T_b AND SELF.T_c= T1.T_c AND SELF.T_d = T1.T_d) THEN 
+				FEQR:= 1;  
+			ELSIF (SELF.T_a= T1.T_a AND SELF.T_b = T1.T_b AND ((SELF.T_c<= T1.T_c AND SELF.T_d <= T1.T_d) OR (SELF.T_c>= T1.T_c AND SELF.T_d >= T1.T_d))) THEN 
+				FEQR:= 1;
+			ELSIF (S_a >= T1.T_d OR SELF.T_d <= T1_a) THEN 
+				FEQR:= 0;
+			ELSIF (SELF.T_c < T1_b AND SELF.T_d > T1_a) THEN 
+				FEQR:= (SELF.T_d - T1_a)/((T1_b - T1_a)-(SELF.T_c - SELF.T_d));
+			ELSIF  (S_b > T1.T_c AND S_a < T1.T_d) THEN
+				FEQR:= (T1.T_d - S_a)/((S_b - S_a)-(T1.T_c - T1.T_d));
+			ELSE
+				FEQR:= 1;
+			END IF;
+			
+			RETURN FEQR;
+		END;
+
+	MEMBER FUNCTION FEQ (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN REAL IS
+		T1 Trapezoide_TYP;
+		BEGIN
+			T1:= CA_Trap(Dominio,Etiqueta); -- Proceso que recupera para este dominio y la etiqueta el trapezoide
+			RETURN SELF.FEQT(T1);
+		END;
+
+	MEMBER FUNCTION LSHOW(Dominio IN VARCHAR2) RETURN VARCHAR2 IS
+		trapezoide Trapezoide_TYP;
+		TYPE CUR_TYP IS REF CURSOR;
+			c_cursor   	CUR_TYP;
+			etiqueta	VARCHAR2(20);
+			FEQ        	NUMBER(3,2);
+			v_query    	VARCHAR2(255);
+			str        	VARCHAR(60);
+		BEGIN
+			trapezoide:= SELF;
+			v_query := 'SELECT C.trapezoide.FEQT(:T1), etiqueta
+						FROM CatalogoCtx_TAB C
+						WHERE usuario=User AND dominio=:D AND C.trapezoide.FEQT(:T2)>0'; 
+			OPEN c_cursor FOR v_query USING trapezoide, Dominio, trapezoide;
+			LOOP
+				FETCH c_cursor INTO FEQ, etiqueta;
+				EXIT WHEN c_cursor%NOTFOUND;
+				str:= str || FEQ || '/' || Lab1 || '; ';
+			END LOOP;
+			CLOSE c_cursor;
+			RETURN str;
+			EXCEPTION WHEN NO_DATA_FOUND THEN
+				Raise_application_error(-20001,'*** User Not Found *** ');
+		END;
+
+	MEMBER FUNCTION SHOW RETURN VARCHAR2 IS
+		trapezoide Trapezoide_TYP;
+		str VARCHAR(60);
+		BEGIN
+			trapezoide:= SELF;
+			str:= str || '(' || trapezoide.A || ', ' || trapezoide.B || ', ' || trapezoide.C || ', ' || trapezoide.D || ')';
+			RETURN str;
+		END;
+
+END;
+/
+
+
+
+
+/*
 -- SOSPECHO QUE SON LOS CONJUNTOS DISCRETOS 
 
 CREATE OR REPLACE TYPE BODY dominio_fijo_t AS
@@ -263,3 +388,4 @@ CREATE OR REPLACE TYPE BODY Fuzzy_objtyp AS
 END;
 /
 
+*/
