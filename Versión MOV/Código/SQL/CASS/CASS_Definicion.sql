@@ -7,49 +7,73 @@
 
 */
 
-/*
-	VERSION ESTEBAN
-*/
+/******************** USUARIO ********************/
 
-CREATE TABLE UsuarioCtx_TAB (
-	nombre 		VARCHAR2(50),
+CREATE OR REPLACE TYPE UsuarioCtx_TYP AS OBJECT(
+	nombre	VARCHAR2(50)
+);
+
+CREATE TABLE UsuarioCtx_TAB OF UsuarioCtx_TYP(
 	CONSTRAINT PK_UsuarioCtx PRIMARY KEY (nombre)
 );
 
-CREATE TABLE DimensionCtx_TAB (
-	nombre		VARCHAR2(50), -- Tipo de dimensión Ej: Usuario, Tarea, Rol
+/******************** DIMENSION ********************/
+
+CREATE OR REPLACE TYPE DimensionCtx_TYP AS OBJECT(
+	nombre	VARCHAR2(50), -- Tipo de dimensión Ej: Usuario, Tarea, Rol
+);
+
+CREATE TABLE DimensionCtx_TAB OF DimensionCtx_TYP(
 	CONSTRAINT PK_DimensionCtx PRIMARY KEY (nombre)
 );
 
 CREATE TABLE DependenciaCtx_TAB (
-	dominio		VARCHAR2(50), -- Dominio difuso
-	dimension 	VARCHAR2(50), -- Dimension Ej: Rol, Tareas, Lugar
+	dominio		DominioDifuso_TYP, -- Dominio difuso
+	dimension 	DimensionCtx_TYP, -- Dimension Ej: Rol, Tareas, Lugar
 	CONSTRAINT PK_DependenciaCtx PRIMARY KEY (dominio,dimension),
-	CONSTRAINT FK_Dep_Dominio FOREIGN KEY (dominio) REFERENCES DimensionCtx_TAB,
-	CONSTRAINT FK_Dep_Dimension FOREIGN KEY (dimension) REFERENCES DimensionCtx_TAB,
+	CONSTRAINT FK_Dep_Dominio FOREIGN KEY (dominio.nombre) REFERENCES DominioDifuso_TAB,
+	CONSTRAINT FK_Dep_Dimension FOREIGN KEY (dimension.nombre) REFERENCES DimensionCtx_TAB,
+);
+
+CREATE OR REPLACE TYPE DomDimensionCtx_TYP AS OBJECT (
+	dominio		VARCHAR2(50), -- Dominio: Medico, Operatorio
+	dimension 	DimensionCtx_TYP, -- Dimension Ej: Rol, Tareas, Lugar
+);
+
+CREATE OR REPLACE TYPE ListaDomDimensionCtx_TYP AS TABLE OF DomDimensionCtx_TYP(
+	CONSTRAINT PK_ListaDomDimensionCtx PRIMARY KEY (dominio,dimension),
+	CONSTRAINT FK_ListaDomDimCtx_Dimension FOREIGN KEY (dimension) REFERENCES DimensionCtx_TAB
 );
 
 CREATE TABLE DomDimensionCtx_TAB (
-	usuario		VARCHAR2(50),
-	dimension	VARCHAR2(50),
-	dominio		VARCHAR2(50), -- Dominio Dimension Contextual Ej: Post-Operatorio
+	usuario			UsuarioCtx_TYP,
+	dimension 		DomDimensionCtx_TYP,
+	CONSTRAINT PK_DomDimensionCtx PRIMARY KEY (usuario.nombre, dimension.dimension.nombre, dimension.dominio),
+	CONSTRAINT FK_DomDimCtx_Usuario FOREIGN KEY (usuario.nombre) REFERENCES UsuarioCtx_TAB,
+	CONSTRAINT FK_DomDimCtx_Dimension FOREIGN KEY (dimension.dimension.nombre) REFERENCES DimensionCtx_TAB,
+);
+/******************** CATÁLOGO ********************/
+
+CREATE TABLE CatalogoCtx_TAB (
+	usuario			UsuarioCtx_TYP,
+	dimensiones		ListaDomDimensionCtx_TYP,
+	dominio 		DominioDifuso_TYP,
+	etiqueta 		VARCHAR2(50),
+	trapezoide		Trapezoide_TYP,	 
+	CONSTRAINT PK_CatalogoCtx PRIMARY KEY (usuario.nombre,dimensiones,dominio.nombre)
+) 	NESTED TABLE dimensiones AS DomDimensionCtx_TAB 
+		(PRIMARY KEY (NESTED_TABLE_ID, dominio, dimension) );
+		
+/*
+CREATE TABLE DomDimensionCtx_TAB OF DomDimensionCtx_TYP(
 	CONSTRAINT PK_DomDimensionCtx PRIMARY KEY (usuario,dimension,dominio),
 	CONSTRAINT FK_DomCtx_Usuario FOREIGN KEY (usuario) REFERENCES UsuarioCtx_TAB,
 	CONSTRAINT FK_DomCtx_Dimension FOREIGN KEY (dimension) REFERENCES DimensionCtx_TAB,
 );
-
+*/
 -- Para primeras pruebas solo con dominios difusos. Hacer transformación con cualquier dominio difuso
-CREATE TABLE CatalogoCtx_TAB (
-	usuario			VARCHAR2(50),
-	dimension 		VARCHAR2(50),
-	domDimension	VARCHAR2(50),
-	dominio 		VARCHAR2(50), -- Dominio difuso Ej: Peso
-	etiqueta 		VARCHAR2(50),
-	trapezoide		Trapezoide_TYP,	 
-	CONSTRAINT PK_CatalogoCtx PRIMARY KEY (usuario, dimension, domDimension, dominio),
-	CONSTRAINT FK_Cat_DomDimension FOREIGN KEY (usuario,dimension,domDimension) REFERENCES DomDimensionCtx_TAB,
-	CONSTRAINT FK_Cat_Dominio FOREIGN KEY (dominio) REFERENCES DominioDifuso_TAB,
-);
+
+
 
 /*
 CREATE TABLE UDLinLab_tab (

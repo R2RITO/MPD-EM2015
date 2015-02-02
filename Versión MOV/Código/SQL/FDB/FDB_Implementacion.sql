@@ -10,21 +10,23 @@
 */
 
 CREATE OR REPLACE TYPE BODY Trapezoide_TYP AS 
-	
-	-- NOTA ESTEBAN: Creo que esto deberia pasarse a CTP, ya que CAS hace este manejo
-	-- 				 no es propio de Trapezoide_TYP tener que ver si existe algo en CatalogoCtx_TAB
-	/* 
-		Dado el dominio y la etiqueta explicitamente, y 
-		el usuario y el contexto implicitamente buscamos
+
+	/* Los trapezoides no tienen idea de que existe un catálogo, es deber del CTP buscar las maneras alternativas de construir
+	el trapezoide asi que lo que a continuación está comentado lo pasé a CTP_Implementación como procedimientos */
+
+	/*
+		Dado el dominio y la etiqueta explicitamente, y el usuario y el contexto implicitamente buscamos
 		y devolvemos el trapezoide correspondiente
-	*/
+
 	CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN SELF AS RESULT IS
 		tupla CatalogoCtx_TAB%ROWTYPE;
 	  	trapezoide Trapezoide_TYP;
 	  	BEGIN
+			---------------------------------------------------------------
 	    	SELECT  * INTO tupla
 	   		FROM    CatalogoCtx_TAB
-	   		WHERE   usuario=user AND etiqueta=Etiqueta AND dominio=Dominio;
+	   		WHERE   usuario.nombre=user AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+			---------------------------------------------------------------
 	   		SELF:= tupla.trapezoide;
 	   		RETURN;
 	   		EXCEPTION WHEN NO_DATA_FOUND THEN
@@ -46,6 +48,8 @@ CREATE OR REPLACE TYPE BODY Trapezoide_TYP AS
 			RETURN;
 		END;
   
+	*/
+	
 	MEMBER FUNCTION FEQT (T1 IN Trapezoide_TYP) RETURN REAL IS
 		FEQR  NUMBER (3,2); 
 		S_a   NUMBER(12,3);

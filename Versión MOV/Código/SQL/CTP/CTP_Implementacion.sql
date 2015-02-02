@@ -1,5 +1,45 @@
--- Dado el dominio y la etiqueta devuelve la definicion de estos, junto al
--- correspondiente trapezoide que fue definido por el usuario por defecto
+/*
+	CTP_Implementacion
+	
+	Ramón Marquez
+	Esteban Oliveros
+	Arturo Voltattorni
+*/
+
+	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN SELF AS RESULT IS
+	CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN Trapezoide_TYP IS
+		tupla CatalogoCtx_TAB%ROWTYPE;
+	  	trapezoide Trapezoide_TYP;
+		BEGIN
+			---------------------------------------------------------------
+	    	SELECT  * INTO tupla
+	   		FROM    CatalogoCtx_TAB
+	   		WHERE   usuario.nombre=user AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+			---------------------------------------------------------------
+	   		RETURN tupla.trapezoide;
+	   		EXCEPTION WHEN NO_DATA_FOUND THEN
+				RETURN CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
+		END;
+	/
+
+	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Valor IN NUMBER) RETURN SELF AS RESULT IS
+ 		BEGIN
+    		SELF:= Trapezoide_TYP( Valor, Valor, Valor, Valor);
+    	RETURN;
+ 		END;
+
+	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, NodoA IN NUMBER, NodoB IN NUMBER, NodoC IN NUMBER, NodoD IN NUMBER) RETURN SELF AS RESULT IS
+		CT_T Trapezoid_Objtyp;
+		BEGIN
+			CA_LinLab(Dominio, Etiqueta, User , NodoA, NodoB, NodoC, NodoD); -- Proceso para insertar en CatalogCtx_TAB
+			SELF:= Trapezoid_Objtyp(NodoA, NodoB, NodoC, NodoD);
+			RETURN;
+		END;
+
+
+
+
+/*
 CREATE OR REPLACE FUNCTION CA_UserDefault(CT_Domain VARCHAR2, CT_Label VARCHAR2) 
    RETURN Trapezoid_ObjTyp
 is
@@ -79,3 +119,4 @@ END;
 /
 
 
+*/
