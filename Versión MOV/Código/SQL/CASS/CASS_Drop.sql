@@ -1,0 +1,9 @@
+DROP TABLE CatalogoCtx_TAB;
+DROP TABLE DomDimensionCtx_TAB;
+--DROP TYPE ListaDomDimensionCtx_TYP;
+DROP TYPE DomDimensionCtx_TYP;
+DROP TABLE DependenciaCtx_TAB;
+DROP TABLE DimensionCtx_TAB;
+DROP TYPE DimensionCtx_TYP;
+DROP TABLE UsuarioCtx_TAB;
+DROP TYPE UsuarioCtx_TYP;

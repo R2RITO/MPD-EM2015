@@ -6,37 +6,73 @@
 	Arturo Voltattorni
 */
 
+/* ******************* CAS ******************* */
+
 	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN SELF AS RESULT IS
-	CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN Trapezoide_TYP IS
-		tupla CatalogoCtx_TAB%ROWTYPE;
-	  	trapezoide Trapezoide_TYP;
-		BEGIN
-			---------------------------------------------------------------
-	    	SELECT  * INTO tupla
+	CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Usuario IN VARCHAR2, Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, Ctxs IN ListaDomDimensionCtx_TYP) RETURN Trapezoide_TYP IS
+		coincide	BOOLEAN; -- Chequeamos que la lista de contextos coincidan
+		existe 		BOOLEAN;
+		no_etiqueta EXCEPTION;
+		CURSOR domCtx IS 
+			SELECT 	* 
+			FROM 	TABLE(Ctxs);
+		
+		CURSOR catCtx IS
+			SELECT  dimension
 	   		FROM    CatalogoCtx_TAB
-	   		WHERE   usuario.nombre=user AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+	   		WHERE   usuario.nombre=Usuario AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+		
+		--tupla CatalogoCtx_TAB%ROWTYPE;
+		--trapezoide Trapezoide_TYP;
+		--CURSOR dom IS ListaDomDimensionCtx_TYP;
+		BEGIN
+			-- Prueba
+			--dbms_output.put_line('EJECUTA');
+			--FOR ctx IN domCtx LOOP
+			--	dbms_output.put_line(ctx.dimension.nombre || ' --> ' || ctx.dominio);
+			--END LOOP;
+			coincide := TRUE;
+			existe := FALSE;
+			FOR cat IN catCtx LOOP
+				FOR dom IN domCtx LOOP
+					existe := existe OR (
+										(dom.dimension.nombre LIKE cat.dimension.nombre) AND 
+										(dom.dominio LIKE cat.dominio)
+										);
+				END LOOP;
+				coincide := coincide AND existe;
+			END LOOP;
+			RETURN NULL;
+		EXCEPTION
+			WHEN no_etiqueta THEN
+				raise_application_error(-20001,'*** El usuario no ha definido la etiqueta para el dominio indicado ***');
+	
 			---------------------------------------------------------------
-	   		RETURN tupla.trapezoide;
-	   		EXCEPTION WHEN NO_DATA_FOUND THEN
-				RETURN CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
+	    	--SELECT  * INTO tupla
+	   		--FROM    CatalogoCtx_TAB
+	   		--WHERE   usuario.nombre=user AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+			---------------------------------------------------------------
+	   		--RETURN tupla.trapezoide;
+	   		--EXCEPTION WHEN NO_DATA_FOUND THEN
+				--RETURN NULL;--CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
 		END;
 	/
 
 	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Valor IN NUMBER) RETURN SELF AS RESULT IS
- 		BEGIN
-    		SELF:= Trapezoide_TYP( Valor, Valor, Valor, Valor);
-    	RETURN;
- 		END;
+ 		--BEGIN
+    	--	SELF:= Trapezoide_TYP( Valor, Valor, Valor, Valor);
+    	--RETURN;
+ 		--END;
 
 	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, NodoA IN NUMBER, NodoB IN NUMBER, NodoC IN NUMBER, NodoD IN NUMBER) RETURN SELF AS RESULT IS
-		CT_T Trapezoid_Objtyp;
-		BEGIN
-			CA_LinLab(Dominio, Etiqueta, User , NodoA, NodoB, NodoC, NodoD); -- Proceso para insertar en CatalogCtx_TAB
-			SELF:= Trapezoid_Objtyp(NodoA, NodoB, NodoC, NodoD);
-			RETURN;
-		END;
+		--CT_T Trapezoid_Objtyp;
+		--BEGIN
+		--	CA_LinLab(Dominio, Etiqueta, User , NodoA, NodoB, NodoC, NodoD); -- Proceso para insertar en CatalogCtx_TAB
+		--	SELF:= Trapezoid_Objtyp(NodoA, NodoB, NodoC, NodoD);
+		--	RETURN;
+		--END;
 
-
+/* ******************* CAR ******************* */
 
 
 /*
