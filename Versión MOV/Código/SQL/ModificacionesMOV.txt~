@@ -62,23 +62,3 @@ ALERTA: El UDLinLab_Tab en FDB (que debería ser sólo fuzzy), tiene el usuario
 ahí metido, de hecho el usuario está atravesado en todas partes, problema
 principal: separar contexto (usuario y eso) de difusos, y dónde se une? es decir
 donde va tabla mágica?.
-
-
-
--------------------------------------------------------------------
-El Usuario se tratará como super contexto, estará presente invariablemente en todos los dominios difusos utilizados.
-
-No podrá haber inserts que no contengan un dominio especificado por cada una de las
-dimensiones contextuales de las que depende el dominio difuso.
-Es decir, si para PESO se añade TASK y ROL, no podrá haber inserts que no tengan
-una "instancia" de "TASK".
-
-
-
-
-
-
-
-
-
-
