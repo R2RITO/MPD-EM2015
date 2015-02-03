@@ -1,6 +1,6 @@
 /*
 	CTP_Implementacion
-	
+
 	Ramón Marquez
 	Esteban Oliveros
 	Arturo Voltattorni
@@ -13,15 +13,19 @@
 		coincide	BOOLEAN; -- Chequeamos que la lista de contextos coincidan
 		existe 		BOOLEAN;
 		no_etiqueta EXCEPTION;
-		CURSOR domCtx IS 
-			SELECT 	* 
+		CURSOR domCtx IS
+			SELECT 	*
 			FROM 	TABLE(Ctxs);
-		
+
+		-- Cursor con todos los trapezoides definidos por el usuario.
+		-- NOTA: En esto falta agregar los trapezoides con parametro ALWAYS en 2,
+		-- pero eso luego de agregarse en el catalogo contextual.
+		-- NOTA 2: Priorizar los definidos por el usuario, y luego los de always 2.
 		CURSOR catCtx IS
-			SELECT  dimension
+			SELECT  *
 	   		FROM    CatalogoCtx_TAB
 	   		WHERE   usuario.nombre=Usuario AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
-		
+
 		--tupla CatalogoCtx_TAB%ROWTYPE;
 		--trapezoide Trapezoide_TYP;
 		--CURSOR dom IS ListaDomDimensionCtx_TYP;
@@ -31,22 +35,44 @@
 			--FOR ctx IN domCtx LOOP
 			--	dbms_output.put_line(ctx.dimension.nombre || ' --> ' || ctx.dominio);
 			--END LOOP;
+
+			-- Buscar si algun trapezoide coincide completamente.
 			coincide := TRUE;
 			existe := FALSE;
 			FOR cat IN catCtx LOOP
-				FOR dom IN domCtx LOOP
-					existe := existe OR (
-										(dom.dimension.nombre LIKE cat.dimension.nombre) AND 
-										(dom.dominio LIKE cat.dominio)
-										);
-				END LOOP;
-				coincide := coincide AND existe;
+
+				  -- Iterar sobre la lista de dominios de las dimensiones contextuales
+					-- asociados al trapezoide.
+				  CURSOR listaDomDimCtxTrap IS
+					  SELECT *
+						FROM cat.dimensiones;
+
+					FOR ctxT IN listaCtxTrap LOOP
+						FOR dom IN domCtx LOOP
+							existe := existe OR (
+												(dom.dimension.nombre LIKE ctxT.dimension.nombre) AND
+												(dom.dominio LIKE ctxT.dominio)
+												);
+						END LOOP;
+					coincide := coincide AND existe;
+					END LOOP;
+
+					-- Si "coincide" es TRUE, quiere decir que es el trapezoide correcto.
+					IF coincide THEN
+						return cat.trapezoide;
+					END IF;
+
 			END LOOP;
+
+			-- Buscar si hay trapezoides en el always 2
+
+			-- Buscar si hay trapezoide en usuario por defecto.
+
 			RETURN NULL;
 		EXCEPTION
 			WHEN no_etiqueta THEN
 				raise_application_error(-20001,'*** El usuario no ha definido la etiqueta para el dominio indicado ***');
-	
+
 			---------------------------------------------------------------
 	    	--SELECT  * INTO tupla
 	   		--FROM    CatalogoCtx_TAB
@@ -76,7 +102,7 @@
 
 
 /*
-CREATE OR REPLACE FUNCTION CA_UserDefault(CT_Domain VARCHAR2, CT_Label VARCHAR2) 
+CREATE OR REPLACE FUNCTION CA_UserDefault(CT_Domain VARCHAR2, CT_Label VARCHAR2)
    RETURN Trapezoid_ObjTyp
 is
   UD_reg UDLinLab_tab%rowtype;
@@ -85,7 +111,7 @@ is
 BEGIN
    User_Def:=UserDefault();
    SELECT  * INTO UD_reg
-   FROM    UDLinLab_tab 
+   FROM    UDLinLab_tab
    WHERE   User_name=User_Def AND Label=CT_Label AND Dom_name=CT_Domain;
    RETURN  UD_reg.Trapezoid;
    EXCEPTION WHEN NO_DATA_FOUND THEN
@@ -98,7 +124,7 @@ END;
 -- Dado un dominio y una etiqueta retorna el trapezoide almacenado
 -- por el usuario actualmente conectado, y de no existir la
 -- definicion de este, busca la del usuario por defecto
-CREATE OR REPLACE FUNCTION CA_Trap (CT_Domain VARCHAR2, CT_Label VARCHAR2) 
+CREATE OR REPLACE FUNCTION CA_Trap (CT_Domain VARCHAR2, CT_Label VARCHAR2)
    RETURN Trapezoid_Objtyp
 is
   UD_reg UDLinLab_tab%rowtype;
@@ -117,11 +143,11 @@ END;
 
 -- Si no encuentra la definicion de la etiqueta en el dominio indicado
 -- por el usuario entonces lo crea con los puntos dados
-CREATE OR REPLACE PROCEDURE CA_LinLab (CT_D VARCHAR2, CT_L VARCHAR2, ID_Us VARCHAR2, TA NUMBER, TB NUMBER, TC NUMBER, TD NUMBER) 
+CREATE OR REPLACE PROCEDURE CA_LinLab (CT_D VARCHAR2, CT_L VARCHAR2, ID_Us VARCHAR2, TA NUMBER, TB NUMBER, TC NUMBER, TD NUMBER)
 is
 Us VARCHAR2(10);
     BEGIN
-    select User_name into Us 
+    select User_name into Us
     from UDLinlab_tab
     where Label = CT_L and User_name=Id_us And Dom_name=CT_D;
     EXCEPTION WHEN NO_DATA_FOUND THEN
@@ -130,19 +156,19 @@ END;
 /
 
 -- No tengo idea de que hacen
-CREATE OR REPLACE PROCEDURE CA_Sem_Fijo_Etiq (dom IN VARCHAR2, et IN VARCHAR2, val IN NUMBER, grado IN NUMBER) 
+CREATE OR REPLACE PROCEDURE CA_Sem_Fijo_Etiq (dom IN VARCHAR2, et IN VARCHAR2, val IN NUMBER, grado IN NUMBER)
 is
 us NUMBER(20);
     BEGIN
     SELECT grado INTO us
-    FROM semejanza_fijo_etiqueta 
+    FROM semejanza_fijo_etiqueta
     WHERE usuario = user AND dom_name = dom AND etiqueta = et AND dominio = val;
     EXCEPTION WHEN NO_DATA_FOUND THEN
       INSERT INTO semejanza_fijo_etiqueta VALUES (user, dom, et, val, grado);
 END;
 /
 
-CREATE OR REPLACE PROCEDURE CA_Sem_Etiq (dom IN VARCHAR2, et1 IN VARCHAR2, et2 IN VARCHAR2, grado IN NUMBER) 
+CREATE OR REPLACE PROCEDURE CA_Sem_Etiq (dom IN VARCHAR2, et1 IN VARCHAR2, et2 IN VARCHAR2, grado IN NUMBER)
 is
 us VARCHAR2(20);
     BEGIN

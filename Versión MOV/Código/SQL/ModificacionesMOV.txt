@@ -10,7 +10,7 @@ CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 			T_c		---> C
 			T_d		---> D
 		DT_objtyp		---> Continuo_TYP
-		UDLinLab_tab 		---> CatalogoCtx_TAB	
+		UDLinLab_tab 		---> CatalogoCtx_TAB
 		[User
 		 Dimension
 		 Linguistic
@@ -73,12 +73,17 @@ dimensiones contextuales de las que depende el dominio difuso.
 Es decir, si para PESO se añade TASK y ROL, no podrá haber inserts que no tengan
 una "instancia" de "TASK".
 
+Para cada entrada en la lista de dom de dim contextuales de un trapezoide (en catalogo contx)
+cada dominio deberá ser del mismo usuario.
 
+Un usuario no puede utilizar dominios de dim context que no sean definidos por el.
 
+-- NOTA: En esto falta agregar los trapezoides con parametro ALWAYS en 2,
+-- pero eso luego de agregarse en el catalogo contextual.
+-- NOTA 2: Priorizar los definidos por el usuario, y luego los de always 2.
 
+Que tengo que hacer, buscar por trapezoide, si la lista de contextos
+asociados coincide totalmente con la lista provista. (Debe haber sólo un trapezoide así, si es que hay)
 
-
-
-
-
-
+Constraint en la lista de contextos como PK para el trapezoide -> Hacer trigger.
+Retornar el trap si lo encuentra, si no user def.
