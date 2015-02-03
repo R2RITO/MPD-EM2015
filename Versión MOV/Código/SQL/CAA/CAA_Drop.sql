@@ -1,0 +1,3 @@
+DROP TABLE JPE_TAB;
+DROP TYPE DomFlexCadera;
+DROP TYPE DomPeso;
