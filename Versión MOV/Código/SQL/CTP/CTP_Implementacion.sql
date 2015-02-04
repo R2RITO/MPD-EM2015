@@ -8,81 +8,96 @@
 
 /* ******************* CAS ******************* */
 
-	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN SELF AS RESULT IS
-	CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Usuario IN VARCHAR2, Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, Ctxs IN ListaDomDimensionCtx_TYP) RETURN Trapezoide_TYP IS
-		coincide	BOOLEAN; -- Chequeamos que la lista de contextos coincidan
-		existe 		BOOLEAN;
-		no_etiqueta EXCEPTION;
-		CURSOR domCtx IS
-			SELECT 	*
-			FROM 	TABLE(Ctxs);
+--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN SELF AS RESULT IS
+CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Usuario IN VARCHAR2, Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, Ctxs IN ListaDomDimensionCtx_TYP) RETURN Trapezoide_TYP IS
+	coincide	BOOLEAN; -- Chequeamos que la lista de contextos coincidan
+	existe 		BOOLEAN;
+	no_etiqueta EXCEPTION;
 
-		-- Cursor con todos los trapezoides definidos por el usuario.
-		-- NOTA: En esto falta agregar los trapezoides con parametro ALWAYS en 2,
-		-- pero eso luego de agregarse en el catalogo contextual.
-		-- NOTA 2: Priorizar los definidos por el usuario, y luego los de always 2.
-		CURSOR catCtx IS
-			SELECT  *
-	   		FROM    CatalogoCtx_TAB
-	   		WHERE   usuario.nombre=Usuario AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+	-- Cursor que tiene la lista de dominios de dimensiones contextuales del
+	-- trapezoide a buscar
+	CURSOR domCtx IS
+		SELECT 	*
+		FROM 	TABLE(Ctxs);
 
-		--tupla CatalogoCtx_TAB%ROWTYPE;
-		--trapezoide Trapezoide_TYP;
-		--CURSOR dom IS ListaDomDimensionCtx_TYP;
-		BEGIN
-			-- Prueba
-			--dbms_output.put_line('EJECUTA');
-			--FOR ctx IN domCtx LOOP
-			--	dbms_output.put_line(ctx.dimension.nombre || ' --> ' || ctx.dominio);
-			--END LOOP;
+	-- Cursor con todos los trapezoides definidos por el usuario con parámetro
+	-- ALWAYS en 0 con la etiqueta solicitada.
+	CURSOR catCtx0 IS
+		SELECT  *
+   		FROM    CatalogoCtx_TAB
+   		WHERE   usuario.nombre=Usuario AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
 
-			-- Buscar si algun trapezoide coincide completamente.
-			coincide := TRUE;
-			existe := FALSE;
-			FOR cat IN catCtx LOOP
+	-- Cursor con todos los trapezoides definidos por el usuario cuyo
+	-- parámetro ALWAYS es 1 con la etiqueta solicitada.
+	CURSOR catCtx1 IS
+		SELECT  *
+				FROM    CatalogoCtx_TAB
+				WHERE   usuario.nombre=Usuario AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
 
-				  -- Iterar sobre la lista de dominios de las dimensiones contextuales
-					-- asociados al trapezoide.
-				  CURSOR listaDomDimCtxTrap IS
-					  SELECT *
-						FROM cat.dimensiones;
+	-- Cursor con todos los trapezoides definidos por el usuario por defecto,
+	-- (es decir, parámetro ALWAYS en 2) con la etiqueta solicitada.
+	CURSOR catCtxDefault IS
+		SELECT  *
+				FROM    CatalogoCtx_TAB
+				WHERE   usuario.nombre='ADMIN' AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
 
-					FOR ctxT IN listaCtxTrap LOOP
-						FOR dom IN domCtx LOOP
-							existe := existe OR (
-												(dom.dimension.nombre LIKE ctxT.dimension.nombre) AND
-												(dom.dominio LIKE ctxT.dominio)
-												);
-						END LOOP;
-					coincide := coincide AND existe;
+
+
+	BEGIN
+
+		-- Buscar si algun trapezoide coincide completamente con parámetro ALWAYS en 0.
+		coincide := TRUE;
+		existe := FALSE;
+		FOR cat IN catCtx0 LOOP
+
+			  -- Iterar sobre la lista de dominios de las dimensiones contextuales
+				-- asociados al trapezoide.
+			  CURSOR listaDomDimCtxTrap IS
+				  SELECT *
+					FROM cat.dimensiones;
+
+				FOR ctxT IN listaDomDimCtxTrap LOOP
+					FOR dom IN domCtx LOOP
+						existe := existe OR (
+											(dom.dimension.nombre LIKE ctxT.dimension.nombre) AND
+											(dom.dominio LIKE ctxT.dominio)
+											);
 					END LOOP;
+				coincide := coincide AND existe;
+				END LOOP;
 
-					-- Si "coincide" es TRUE, quiere decir que es el trapezoide correcto.
-					IF coincide THEN
-						return cat.trapezoide;
-					END IF;
+				-- Si "coincide" es TRUE, quiere decir que es el trapezoide correcto.
+				IF coincide THEN
+					return cat.trapezoide;
+				END IF;
 
-			END LOOP;
+		END LOOP;
 
-			-- Buscar si hay trapezoides en el always 2
+		-- Buscar si hay trapezoides que coincidan con parámetro ALWAYS en 1.
+		FOR cat IN catCtx1 LOOP
+			return cat.trapezoide;
+		END LOOP;
 
-			-- Buscar si hay trapezoide en usuario por defecto.
+		-- Buscar si hay trapezoides que coincidan definidos por el usuario por defecto.
+		FOR cat IN catCtxDefault LOOP
+			return cat.trapezoide;
+		END LOOP;
 
-			RETURN NULL;
-		EXCEPTION
-			WHEN no_etiqueta THEN
-				raise_application_error(-20001,'*** El usuario no ha definido la etiqueta para el dominio indicado ***');
+		RETURN NULL;
+	EXCEPTION
+		WHEN no_etiqueta THEN
+			raise_application_error(-20001,'*** El usuario no ha definido la etiqueta para el dominio indicado ***');
 
-			---------------------------------------------------------------
-	    	--SELECT  * INTO tupla
-	   		--FROM    CatalogoCtx_TAB
-	   		--WHERE   usuario.nombre=user AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
-			---------------------------------------------------------------
-	   		--RETURN tupla.trapezoide;
-	   		--EXCEPTION WHEN NO_DATA_FOUND THEN
-				--RETURN NULL;--CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
-		END;
-	/
+		---------------------------------------------------------------
+    	--SELECT  * INTO tupla
+   		--FROM    CatalogoCtx_TAB
+   		--WHERE   usuario.nombre=user AND etiqueta=Etiqueta AND dominio.nombre=Dominio;
+		---------------------------------------------------------------
+   		--RETURN tupla.trapezoide;
+   		--EXCEPTION WHEN NO_DATA_FOUND THEN
+			--RETURN NULL;--CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
+	END;
+/
 
 	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Valor IN NUMBER) RETURN SELF AS RESULT IS
  		--BEGIN
