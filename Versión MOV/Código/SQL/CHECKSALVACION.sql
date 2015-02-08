@@ -1,0 +1,20 @@
+SET LINESIZE 100
+SET PAGESIZE 200
+SET HEADING OFF
+SET SERVEROUTPUT ON
+
+SELECT * FROM DOMINIODIFUSO_TAB;
+-------------------------------------------
+SELECT * FROM USUARIOCTX_TAB;
+-------------------------------------------
+SELECT * FROM DIMENSIONCTX_TAB;
+
+SELECT * FROM DEPENDENCIACTX_TAB D;
+
+SELECT * FROM DOMDIMENSIONCTX_TAB D;
+
+SELECT * FROM CONTEXTO_TAB;
+-------------------------------------------
+SELECT * FROM CATALOGOCTX_TAB;
+-------------------------------------------
+SELECT * FROM JPE_TAB;
