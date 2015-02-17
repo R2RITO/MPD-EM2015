@@ -63,7 +63,7 @@ BEGIN
 													DomDimensionCtx_TYP('JUAN','USER')
 													);
 	definirEtiqueta('PESO','GORDO',7,8,9,10,A,'JUAN',0);
-	T := CatalogoEtiqueta('DEFAULT', 'PESO', 'GORDO',A );
+	--T := CatalogoEtiqueta('DEFAULT', 'PESO', 'GORDO',A );
 
 END;
 /

@@ -31,6 +31,22 @@ CREATE TABLE UsuarioCtx_TAB(
 )
 /
 
+/* *********************** AGREGAAANDOOOO ESTOOOOOOOO ****************** */
+/* DATOS DEL MEDICO */
+CREATE OR REPLACE TYPE Medico_TYP AS OBJECT(
+   CI NUMBER(10),
+   Nombres VARCHAR2(50),
+   Apellidos VARCHAR2(50),
+   Usuario VARCHAR2(20),
+   Contrasena VARCHAR2(20),
+   Fisio NUMBER(1)
+) NOT FINAL;
+/
+
+CREATE TABLE Medico OF Medico_TYP(
+  CONSTRAINT PK_MEDICO PRIMARY KEY (usuario)
+);
+
 /* ******************* DIMENSION ******************* */
 
 -- USER TASK ROL

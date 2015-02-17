@@ -13,6 +13,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE TYPE BODY Paciente_t AS
 MEMBER FUNCTION FEQ (et in NUMBER) return real is
 cursor inv1_idiomas is
