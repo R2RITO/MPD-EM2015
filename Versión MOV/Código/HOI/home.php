@@ -138,7 +138,9 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
     		</div>
     		<!-- FOOTER -->
     		<div class="row footer">
-    			<div class="col-xs-12 " style="">FOOTER</div>
+    			<div class="col-xs-12 " style="">
+                    <p>© Laboratorio de Marcha | Hospital Ortopédico Infantil </p>   
+                </div>
     		</div>
     	</div>
     </body>
