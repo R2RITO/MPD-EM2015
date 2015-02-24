@@ -113,7 +113,8 @@
                         </div>                        
                         <button type="submit" class="btn btn-primary" name="submit">Iniciar sesión</button>
                     </form>                    
-                    <button type="button" class="btn btn-default" style="margin-top: 50px;">Registrarse</button>
+
+                    <button type="button" class="btn btn-link" onClick="document.location.href='<?php echo "registro.php" ?>'" style="margin-top: 50px;">Registrarse</button>
                 </div>
 			</div>
     		<!-- FOOTER -->
