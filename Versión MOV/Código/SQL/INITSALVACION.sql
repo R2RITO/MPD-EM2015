@@ -1,3 +1,4 @@
+set serveroutput on
 -- USUARIOS
 INSERT INTO UsuarioCtx_TAB VALUES ('DEFAULT');
 INSERT INTO UsuarioCtx_TAB VALUES ('JUAN');
@@ -28,11 +29,15 @@ BEGIN
 	agregarDomDimensionCtx('DEFAULT','TASK','DEFAULT');
 	agregarDomDimensionCtx('DEFAULT','ROL','DEFAULT');
 	agregarDomDimensionCtx('JUAN','TASK','OPERACION');
+	agregarDomDimensionCtx('JUAN','TASK','DEFAULT');
+	agregarDomDimensionCtx('JUAN','TASK','EXAMEN');
 	agregarDomDimensionCtx('JUAN','ROL','MEDICO');
+	agregarDomDimensionCtx('JUAN','ROL','DEFAULT');
+	agregarDomDimensionCtx('JUAN','ROL','FISIO');
 	agregarDomDimensionCtx('JUAN','USER','JUAN');
 END;
 /
-
+*/
 /* PROBANDO METODO SON IGUALES --- FUNCIONA!
 DECLARE 
 	A Contexto_TYP;
@@ -54,16 +59,42 @@ END;
 
 
 DECLARE 
-	T Trapezoide_TYP;
 	A  ListaDomDimensionCtx_TYP;
+	T Trapezoide_TYP;
 BEGIN
+	A := ListaDomDimensionCtx_TYP(
+													DomDimensionCtx_TYP('OPERATORIO','TASK'),
+													DomDimensionCtx_TYP('FISIO','ROL'),
+													DomDimensionCtx_TYP('JUAN','USER')
+													);
+	definirEtiqueta('PESO','GORDO',7,8,9,10,A,'JUAN',0);
 	A := ListaDomDimensionCtx_TYP(
 													DomDimensionCtx_TYP('OPERATORIO','TASK'),
 													DomDimensionCtx_TYP('MEDICO','ROL'),
 													DomDimensionCtx_TYP('JUAN','USER')
 													);
-	definirEtiqueta('PESO','GORDO',7,8,9,10,A,'JUAN',0);
-	--T := CatalogoEtiqueta('DEFAULT', 'PESO', 'GORDO',A );
+	definirEtiqueta('PESO','GORDO',1,2,3,4,A,'JUAN',0);
+	A := ListaDomDimensionCtx_TYP(
+													DomDimensionCtx_TYP('OPERATORIO','TASK'),
+													DomDimensionCtx_TYP('MEDICO','ROL'),
+													DomDimensionCtx_TYP('JUAN','USER')
+													);
+	definirEtiqueta('PESO','GORDO',3,4,5,6,A,'JUAN',2);
+	A := ListaDomDimensionCtx_TYP(
+													DomDimensionCtx_TYP('OPERATORIO','TASK'),
+													DomDimensionCtx_TYP('MEDICO','ROL'),
+													DomDimensionCtx_TYP('JUAN','USER')
+													);
+	definirEtiqueta('PESO','GORDO',5,6,7,8,A,'JUAN',1);
+
+	A := ListaDomDimensionCtx_TYP(
+													DomDimensionCtx_TYP('OPERATORIO','TASK'),
+													DomDimensionCtx_TYP('MEDICO','ROL'),
+													DomDimensionCtx_TYP('JUAN','USER')
+													);
+
+	T := CatalogoEtiqueta('JUAN', 'PESO', 'GORDO',A );
+	DBMS_OUTPUT.PUT_LINE('------->' || T.A || ' ' || T.B || ' ' || T.C || ' ' || T.D);
 
 END;
 /

@@ -9,16 +9,16 @@
 
 <?php 
 
-#include_once ("FachadaBD.php");
+include_once ("FachadaBD.php");
 #include_once ("EFA_tab.php");
-#include_once ("Medico.php");
+include_once ("Medico.php");
 
-/*
+
 if($_POST["medico"] == 1){ echo "es fisioterapeuta";
 						}else{
 							echo "es otro"; 
 						};
-*/
+
 function verificar_nombre(){
 	$valido = true;
 	if(trim($_POST["firstname"]) == ""){	
@@ -84,7 +84,7 @@ function selec_medico(){
 	return $valido;
 }
 
-/*
+
 function unic_user(){
 		
 		$fbd = FachadaBD::getInstance();
@@ -93,7 +93,7 @@ function unic_user(){
         $query = "SELECT COUNT(USUARIO) FROM MEDICO WHERE USUARIO ='".$user."' ";
 		
         
-        $conexion = $fbd->conectar("USERDEF","1234");
+        $conexion = $fbd->conectar("ADMIN","1234");
         $results = oci_parse($conexion, $query);
         oci_execute($results);
 		$row = oci_fetch_array($results,OCI_BOTH);
@@ -134,7 +134,7 @@ if($valido){
 	
 	header ("Location: f_indexE2.php");
 }
-*/
+
 ?>
 
 <html>
@@ -163,10 +163,10 @@ if($valido){
 						<h2 align="center">Datos Personales del Médico</h2>
 							<table >
 								<tr>
-									<td> Nombres:</td>
+									<td> Nombresss:</td>
 									<td> <input type="text" id="firstname" name="firstname"><br>
 										 <?php verificar_nombre();?></td>
-									<td
+									<td>
 								</tr>
 								<tr>
 									<td> Apellidos:</td>
@@ -180,7 +180,7 @@ if($valido){
 								<tr>
 									<td> Usuario:</td>
 									<td> <input type="text" id="username" name="username"><br>
-										 <?php verificar_usuario(); ?></td>
+										 <?php verificar_usuario(); unic_user()? ?></td>
 								</tr>
 								<tr>
 									<td> Contraseña:</td>
@@ -193,11 +193,11 @@ if($valido){
 										 <?php verificar_contrasena(); contrasenas_iguales()?></td>
 								</tr>
 								<tr>
-									<td> Tipo de Usuario:</td>
+									<td> Tipo de Usuario:<?php selec_medico();?></td>
 									<td> 
 										<input type="radio" name="medico" id="medico" value=1>Fisioterapeuta<br>
 										<input type="radio" name="medico" id="medico" value=2>Interpretador
-										<!-- <?php selec_medico()?> -->
+										
 									</td>
 								</tr>
 							</table>

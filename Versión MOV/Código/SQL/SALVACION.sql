@@ -1,5 +1,5 @@
 -- MINIPROYECTO ESTEBAN STYLE 
-
+set serveroutput on
 /* ******************* DOMINIO DIFUSO ******************* */
 
 CREATE TABLE DominioDifuso_TAB (
@@ -93,7 +93,8 @@ CREATE SEQUENCE CTX_ID
 CREATE OR REPLACE TYPE Contexto_TYP AS OBJECT (
 	id			NUMBER(35),
 	dimensiones	ListaDomDimensionCtx_TYP,
-	MEMBER FUNCTION esIgual(ctx IN ListaDomDimensionCtx_TYP) RETURN BOOLEAN
+	MEMBER FUNCTION esIgual(ctx IN ListaDomDimensionCtx_TYP) RETURN BOOLEAN,
+	MEMBER FUNCTION show RETURN VARCHAR2
 )
 /
 
@@ -129,6 +130,16 @@ CREATE OR REPLACE TYPE BODY Contexto_TYP AS
 			
 			RETURN coincide;
 		END;
+	MEMBER FUNCTION show RETURN VARCHAR2 IS
+		CURSOR contextos IS
+			SELECT *
+			FROM TABLE(SELF.dimensiones);		
+		BEGIN
+			FOR a IN contextos LOOP
+				DBMS_OUTPUT.PUT_LINE('------->' || a.dominio || ' ' || a.dimension);
+			END LOOP;
+			RETURN NULL;
+		END;
 END;
 /
 
@@ -144,6 +155,7 @@ CREATE TABLE CatalogoCtx_TAB (
 	dominio 		VARCHAR2(50),
 	etiqueta		VARCHAR2(50),
 	contexto 		NUMBER(35),
+	always   		NUMBER(35),
 	trapezoide		Trapezoide_TYP,
 	CONSTRAINT PK_CatalogoCtx PRIMARY KEY (usuario,dominio,etiqueta,contexto),
 	CONSTRAINT FK_Cat_Usuario FOREIGN KEY (usuario) REFERENCES UsuarioCtx_TAB,
@@ -205,22 +217,92 @@ CREATE OR REPLACE PROCEDURE  definirEtiqueta(var_dominio IN VARCHAR2, etiqueta I
 																		ctxs IN ListaDomDimensionCtx_TYP, -- Contextos
 																		usuario IN VARCHAR2, -- Usuario que define la etiqueta
 																		ALWAYS IN NUMBER) AS
-	-- Permite filtrar los contextos que necesitamos
+	-- Permite filtrar los que necesitamos
 	-- NOTA: asumir que en Ctxs se pasan todos los contextos actuales del usuario y por ello hay que filtrarlos, no completarlos
 	CURSOR domCtx IS
 		SELECT  ctx.dominio dom, ctx.dimension dim
 		FROM 	TABLE(ctxs) ctx, DependenciaCtx_TAB dep
 		WHERE dep.domDifuso = var_dominio 
 			AND dep.dimension = ctx.dimension;
-	test ListaDomDimensionCtx_TYP;
+	CURSOR grpCtx IS
+		SELECT ctx.dimensiones dims
+		FROM Contexto_TAB ctx, CatalogoCtx_TAB cat
+		WHERE ctx.id = cat.contexto
+			AND cat.dominio = var_dominio
+			AND cat.usuario = usuario
+			AND cat.etiqueta = etiqueta;
+	CURSOR grpCtx_def IS
+		SELECT ctx.dimensiones dims
+		FROM Contexto_TAB ctx, CatalogoCtx_TAB cat
+		WHERE ctx.id = cat.contexto
+			AND cat.dominio = var_dominio
+			AND cat.usuario = 'DEFAULT'
+			AND cat.etiqueta = etiqueta;
+		
+	list ListaDomDimensionCtx_TYP;
 	k NUMBER;
+	x Contexto_TYP;
+	y Contexto_TYP;
+	existe BOOLEAN;
+	aux VARCHAR2(30000);
 	BEGIN
-		k := 1;
-		test := ListaDomDimensionCtx_TYP();
-		FOR i IN domCtx LOOP
-			test.EXTEND;
-			test(k) := DomDimensionCtx_TYP(i.dom, i.dim);
-			k := k + 1;
-		END LOOP;
+			existe := FALSE;
+			k := 1;
+			list := ListaDomDimensionCtx_TYP();
+		IF (ALWAYS = 0) THEN
+			-- Importa para este contexto
+			FOR i IN domCtx LOOP
+				list.EXTEND;
+				list(k) := DomDimensionCtx_TYP(i.dom, i.dim);
+				k := k + 1;
+			END LOOP;
+			x := Contexto_TYP(1,list);
+			FOR i IN grpCtx LOOP
+				existe := existe OR x.esIgual(i.dims);
+			END LOOP;
+			
+			IF (existe) THEN
+				DBMS_OUTPUT.PUT_LINE('ESTA REPETIDO!!!'); -- Podriamos realizar una sustitucion del trapezoide
+			ELSE
+				k := CTX_ID.NEXTVAL;
+				INSERT INTO Contexto_TAB VALUES (k, list);
+				INSERT INTO CatalogoCtx_TAB VALUES (usuario, var_dominio, etiqueta, k, 0, Trapezoide_TYP(A,B,C,D));
+			END IF;
+			
+		ELSIF (ALWAYS = 1) THEN
+			-- Importa para el contexto por defecto del usuario
+			FOR i IN domCtx LOOP
+				list.EXTEND;
+				list(k) := DomDimensionCtx_TYP('DEFAULT', i.dim);
+				k := k + 1;
+			END LOOP;		
+			k := CTX_ID.NEXTVAL;
+			INSERT INTO Contexto_TAB VALUES (k, list);
+			INSERT INTO CatalogoCtx_TAB VALUES (usuario, var_dominio, etiqueta, k, 1, Trapezoide_TYP(A,B,C,D));
+
+		ELSIF (ALWAYS = 2) THEN
+			-- Importa para el contexto por defecto de cualquier usuario
+			FOR i IN domCtx LOOP
+				list.EXTEND;
+				list(k) := DomDimensionCtx_TYP('DEFAULT', i.dim);
+				k := k + 1;
+			END LOOP;
+
+			x := Contexto_TYP(1,list);
+			FOR i IN grpCtx_def LOOP
+				existe := existe OR x.esIgual(i.dims);
+			END LOOP;
+			
+			IF (existe) THEN
+				DBMS_OUTPUT.PUT_LINE('ESTA REPETIDO!!!'); -- Podriamos realizar una sustitucion del trapezoide
+			ELSE
+				k := CTX_ID.NEXTVAL;
+				INSERT INTO Contexto_TAB VALUES (k, list);
+				INSERT INTO CatalogoCtx_TAB VALUES ('DEFAULT', var_dominio, etiqueta, k, 2, Trapezoide_TYP(A,B,C,D));
+			END IF;		
+			RETURN;
+		END IF;
+		
+
 	END;
 /
