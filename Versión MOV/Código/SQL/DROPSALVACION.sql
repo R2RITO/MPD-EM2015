@@ -3,6 +3,7 @@ DROP PROCEDURE agregarDomDimensionCtx;
 DROP PROCEDURE agregarDependenciaCtx;
 DROP PROCEDURE agregarDimensionCtx;
 DROP TABLE JPE_TAB;
+DROP TABLE MEDICO;
 DROP TYPE DomPeso;
 DROP TABLE CatalogoCtx_TAB;
 DROP TABLE ContextoDim_TAB;
