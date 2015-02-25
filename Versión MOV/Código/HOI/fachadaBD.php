@@ -62,4 +62,32 @@ class fachadaBD {
     }
 }
 
+/*  Funcion que agrega un usuario nuevo en la base
+    de datos.
+*/
+	function agregarUsuarioBD($objeto) {
+
+        $user = strtoupper(htmlentities($objeto->getUsuario(), ENT_QUOTES));
+        
+        $pass = $objeto->getContrasena();
+
+        $conexion = $this->conectar("ADMIN","1234");
+
+        $agrego = oci_parse($conexion,'CREATE USER '.$user.' IDENTIFIED BY '.$pass);
+        oci_execute($agrego);
+
+        $agrego = oci_parse($conexion,'GRANT ALL PRIVILEGES TO '.$user);
+        oci_execute($agrego);
+
+        $string = "INSERT INTO USUARIOS VALUES ('".$user."')";
+        $result = oci_parse($conexion, $string);
+        oci_execute($result);
+
+        $result = oci_parse($conexion, "INSERT INTO MEDICO VALUES (".$objeto->getCI().", '".$objeto->getNombres()."', '".$objeto->getApellidos()."', '".$user."', '".$pass."', ".$objeto->isFisio().")");
+        oci_execute($result);
+
+        $this->desconectar($conexion);
+        return $result;
+    }
+}
 ?>

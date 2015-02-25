@@ -33,7 +33,7 @@ CREATE TABLE UsuarioCtx_TAB(
 
 /* DATOS DEL MEDICO */
 
-CREATE OR REPLACE TABLE Medico(
+CREATE TABLE Medico(
    ci NUMBER(10),
    nombre VARCHAR2(50),
    apellido VARCHAR2(50),
@@ -41,8 +41,7 @@ CREATE OR REPLACE TABLE Medico(
    clave VARCHAR2(50),
    fisio NUMBER(1),
    CONSTRAINT PK_Medico PRIMARY KEY (login)
-
-);
+)
 /
 
 /* ******************* DIMENSION ******************* */

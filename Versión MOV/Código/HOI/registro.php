@@ -25,12 +25,108 @@
 
         <?php
             include_once ("fachadaBD.php");
+			include_once ("medico.php");
 
             function test_input($data) {
                $data = trim($data);
                $data = stripslashes($data);
                $data = htmlspecialchars($data);
                return $data;
+            }
+			
+			$nombreErr = $apellidoErr = $claveErr = $clave2Err = "";
+			$ciErr = $loginErr = $tipoErr = "";
+			$coincideErr = $coincide = "";
+            $usuario = $clave = $clave2 = "";
+			$nombreUsu = $apellidoUsu= "";
+			$ciUsu = $loginUsu = $tipoUsu = "";
+			
+            $check = true;
+
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                if (empty($_POST["nombre"])) {
+                    $nombreErr = "Ingrese su(s) nombre(s)";
+                    $check = false;
+                } else {
+                    $nombreUsu = test_input($_POST["nombre"]);
+                }   
+
+				if (empty($_POST["apellido"])) {
+                    $apellidoErr = "Ingrese su(s) apellido(s)";
+                    $check = false;
+                } else {
+                    $apellidoUsu = test_input($_POST["apellido"]);
+                }		
+
+				if (empty($_POST["ci"])) {
+                    $ciErr = "Ingrese su cédula de identidad";
+                    $check = false;
+                } else {
+                    $ciUsu = test_input($_POST["ci"]);
+                }
+				
+				if (empty($_POST["login"])) {
+                    $loginErr = "Ingrese un nombre de usuario";
+                    $check = false;
+                } else {
+                    $loginUsu = test_input($_POST["login"]);
+                }
+
+                if (empty($_POST["clave"])) {
+                    $claveErr = "Ingrese la contraseña";
+                    $check = false;
+                } else {
+                    $clave = test_input($_POST["clave"]);
+                }  
+
+				if (empty($_POST["clave2"])) {
+                    $clave2Err = "Repita la contraseña";
+                    $check = false;
+                } else {
+                    $clave2 = test_input($_POST["clave2"]);
+                }   
+				
+				if (empty($_POST["tipo"])) {
+                    $tipoErr = "Indique un tipo de usuario";
+                    $check = false;
+                } else {
+                    $tipoUsu = test_input($_POST["tipo"]);
+                }  
+				
+				if ($_POST["clave"]!=$_POST["clave2"]){
+					$coincideErr = "Las contraseñas no coinciden";
+					$check = false;
+				}
+				
+				if ($check){
+					$fbd = FachadaBD::getInstance();
+					$medico = NEW Medico();
+					$medico-> setCI($_POST["ci"]);
+					$medico-> setNombres($_POST["nombre"]);
+					$medico-> setApellidos($_POST["apellido"]);
+					$medico-> setUsuario($_POST["login"]);
+					$medico-> setContrasena($_POST["clave"]);
+					$medico-> setFisio($_POST["tipo"]);
+					$fbd -> agregarUsuarioBD($medico);
+	
+					//iniciar sesion
+					$usuarioDB = strtoupper(htmlentities($loginUsu, ENT_QUOTES));
+					$valido = $fbd->validar_usuario($usuarioDB);
+					if (($row = oci_fetch_array($valido, OCI_ASSOC))) {
+						if($row['CLAVE'] == $clave){
+							$_SESSION['USERNAME'] = $row['LOGIN'];
+							$_SESSION['NOMBRE'] = $row['NOMBRE'];
+							$_SESSION['APELLIDO'] = $row['APELLIDO'];
+							$_SESSION['CI'] = $row['CI'];
+							$_SESSION['FISIO'] = $row['FISIO'];
+							header('Location: home.php');                        
+							exit;
+						} else {
+							$claveErr = "Contraseña incorrecta";
+						}
+					}
+
+				}
             }
 
         ?>        
@@ -51,37 +147,88 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">Nombres</label>
                             <div class="col-xs-10">
-                                <input type="text" class="form-control" placeholder="Nombres del usuario" name="nombre">
+                                <input type="text" class="form-control" placeholder="Nombres del usuario" name="nombre" value="<?php echo $nombreUsu;?>" autofocus>
+								<?php if (!empty($nombreErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $nombreErr;?>
+									</div>                            
+								<?php endif; ?>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">Apellidos</label>
                             <div class="col-xs-10">
-                                <input type="text" class="form-control" placeholder="Apellidos del usuario" name="apellido">
+                                <input type="text" class="form-control" placeholder="Apellidos del usuario" name="apellido" value="<?php echo $apellidoUsu;?>" autofocus>
+								<?php if (!empty($apellidoErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $apellidoErr;?>
+									</div>                            
+								<?php endif; ?>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">CI</label>
                             <div class="col-xs-10">
-                                <input type="text" class="form-control" placeholder="Cédula de identidad del usuario" name="ci">
+                                <input type="text" class="form-control" placeholder="Cédula de identidad del usuario" name="ci" value="<?php echo $ciUsu;?>" autofocus>
+								<?php if (!empty($ciErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $ciErr;?>
+									</div>                            
+								<?php endif; ?>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">Login</label>
                             <div class="col-xs-10">
-                                <input type="text" class="form-control" placeholder="Login de usuario" name="login">
+                                <input type="text" class="form-control" placeholder="Login de usuario" name="login" value="<?php echo $loginUsu;?>" autofocus>
+								<?php if (!empty($loginErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $loginErr;?>
+									</div>                            
+								<?php endif; ?>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">Contraseña</label>
                             <div class="col-xs-10">
-                                <input type="password" class="form-control" placeholder="Ingresar contraseña" name="clave">
+                                <input type="password" class="form-control" placeholder="Ingresar contraseña" name="clave" value="<?php echo $clave;?>" autofocus>
+								<?php if (!empty($claveErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $claveErr;?>
+									</div>                            
+								<?php endif; ?>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">Repetir contraseña</label>
                             <div class="col-xs-10">
-                                <input type="password" class="form-control" placeholder="Repetir contraseña" name="clave2">
+                                <input type="password" class="form-control" placeholder="Repetir contraseña" name="clave2" value="<?php echo $clave2;?>" autofocus>
+								<?php if (!empty($clave2Err)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $clave2Err;?>
+									</div>                            
+								<?php endif; ?>
+								
+								<?php if (!empty($coincideErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $coincideErr;?>
+									</div>                            
+								<?php endif; ?>
+
                             </div>
                         </div>
                         <div class="form-group">
@@ -90,7 +237,7 @@
                                 <div class="radio-inline">
                                     <label>
                                     <input type="radio" name="tipo" value=1>
-                                        Fisioterapeura
+                                        Fisioterapeuta
                                     </label>
                                 </div>
                                 <div class="radio-inline">
@@ -99,6 +246,13 @@
                                         Interpretador
                                     </label>
                                 </div>
+								<?php if (!empty($tipoErr)): ?>
+									<div class="alert alert-danger error" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										<span class="sr-only">Error:</span>
+										<?php echo $tipoErr;?>
+									</div>                            
+								<?php endif; ?>
                             </div>
                         </div>
                         <div style="text-align: center; margin-top: 30px;">
