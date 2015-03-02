@@ -23,6 +23,49 @@
         <link rel="stylesheet" type="text/css" href="./css/basico.css"/>    </head>
         <?php session_start(); ?>
     <body>
+
+        <?php
+        
+            include_once ("fachadaBD.php");
+            include_once ("Paciente.php");
+
+
+            function test_input($data) {
+               $data = trim($data);
+               $data = stripslashes($data);
+               $data = htmlspecialchars($data);
+               return $data;
+            }
+            function verificar_campos(){
+                $valido = true;
+                if((trim($_POST["ci"])) == "" ){
+                    $valido = false;
+                }
+                return $valido;
+            }
+
+            $check = true;
+            $verificarCampos = true;
+            $noEsta = true;
+            $valido = true;
+
+            
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $verificarCampos = verificar_campos();
+
+                if ($verificarCampos){
+                    $fbd = fachadaBD::getInstance();
+                    $valido = $fbd->validar_paciente($_POST["ci"]);
+                    if (($row = oci_fetch_array($valido, OCI_ASSOC))) {
+                        if (count($row)>0){
+                            $fbd->eliminarPacienteBD($_POST["ci"]);
+                            header('Location: paciente_eliminar.php');
+                    }
+                    
+                }
+            }
+        
+        ?>
     	<div class="container-fluid" style="height: 100%;">
     		<!-- TOPBAR -->
     		<div class="row topbar">
@@ -78,8 +121,36 @@
 	    				<!-- CONTENT -->
 	    				<div class="row">
 	    					<div class="col-xs-12 content">
-	    						<h3 class="title">Eliminar registro de paciente</h3>							
-	    					</div>
+                                <form class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    <!-- DATOS DEL PACIENTE -->
+                                    <h3 class="title">Eliminar Registro de Paciente</h3>
+                                    <div class="form-group">
+                                        <label class="col-xs-2 control-label">Cédula</label>
+                                        <div class="col-xs-10">
+                                            <input type="text" class="form-control" placeholder="Cédula del paciente" name="ci">
+                                        </div>
+                                    </div>
+                                    <?php if (!$verificarCampos): ?>
+                                        <div class="alert alert-danger error" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                            <span class="sr-only">Error:</span>
+                                            <?php echo "DEBE escribir la cédula del paciente que desea eliminar";?>
+                                        </div>                            
+                                    <?php endif; ?>
+                                    <?php if (!$noEsta): ?>
+                                        <div class="alert alert-danger error" role="alert">
+                                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                            <span class="sr-only">Error:</span>
+                                            <?php echo "Este paciente no se encuentra registrado. Intente de nuevo";?>
+                                        </div>                            
+                                    <?php endif; ?>
+                                    <div style="text-align: center; margin-top: 30px;">
+                                        <button type="submit" class="btn btn-primary">Agregar</button>
+                                        <button type="button" class="btn btn-default" onClick="document.location.href='<?php echo "paciente_nuevo.php" ?>'">Cancelar</button>
+                                        </div>
+                                    </div>
+                                </form>  
+                            </div>
 	    				</div>
 	    			</div>
 	    		</div>

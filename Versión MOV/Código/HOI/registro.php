@@ -99,7 +99,7 @@
 				}
 				
 				if ($check){
-					$fbd = FachadaBD::getInstance();
+					$fbd = fachadaBD::getInstance();
 					$medico = NEW Medico();
 					$medico-> setCI($_POST["ci"]);
 					$medico-> setNombres($_POST["nombre"]);

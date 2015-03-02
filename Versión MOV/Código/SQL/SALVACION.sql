@@ -44,6 +44,21 @@ CREATE TABLE Medico(
 )
 /
 
+/* ******************** PACIENTE ******************* */
+CREATE TABLE Paciente(
+   CI NUMBER(10),
+   Nombres VARCHAR2(50),
+   Apellidos VARCHAR2(50),
+   Profesion VARCHAR2(50),
+   Lugar_Residencia VARCHAR2(50),
+   Fecha_Nacimiento DATE,
+   ID_Historial NUMBER(6),
+   Diagnostico VARCHAR2(200),
+   Intervenciones_Quir VARCHAR2(150),
+   CONSTRAINT PK_PACIENTE PRIMARY KEY (CI, ID_Historial)
+)
+/
+
 /* ******************* DIMENSION ******************* */
 
 -- USER TASK ROL

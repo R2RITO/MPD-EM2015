@@ -92,8 +92,8 @@ BEGIN
 													DomDimensionCtx_TYP('JUAN','USER')
 													);
 
-	T := CatalogoEtiqueta('JUAN', 'PESO', 'GORDO',A );
-	DBMS_OUTPUT.PUT_LINE('------->' || T.A || ' ' || T.B || ' ' || T.C || ' ' || T.D);
+	--T := CatalogoEtiqueta('JUAN', 'PESO', 'GORDO',A );
+	--DBMS_OUTPUT.PUT_LINE('------->' || T.A || ' ' || T.B || ' ' || T.C || ' ' || T.D);
 
 END;
 /
