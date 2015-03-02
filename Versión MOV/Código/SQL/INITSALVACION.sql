@@ -37,7 +37,6 @@ BEGIN
 	agregarDomDimensionCtx('JUAN','USER','JUAN');
 END;
 /
-*/
 /* PROBANDO METODO SON IGUALES --- FUNCIONA!
 DECLARE 
 	A Contexto_TYP;
