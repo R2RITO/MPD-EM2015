@@ -35,7 +35,19 @@ class fachadaBD {
 /*  Funcion que abre una conexion con la base de datos.
 */
     function conectar() {
-        $conn = oci_connect("system", "ejof", "localhost/XE");
+        $conn = oci_connect("ADMIN", "1234", "localhost/XE");
+        if (!$conn) {
+            $e = oci_error();  
+            echo $e['message']."<br>";
+        }else{  
+            return $conn;
+        }
+    }
+
+/*  Funcion que abre una conexion con la base de datos.
+*/
+    function conectarBD($usuario, $password) {
+        $conn = oci_connect($usuario, $password, "localhost/XE");
         if (!$conn) {
             $e = oci_error();  
             echo $e['message']."<br>";
@@ -60,7 +72,18 @@ class fachadaBD {
         oci_execute($result);
         return $result;
     }
-}
+
+/*  Funcion que devuelve true si el paciente esta en la base de datos
+*/
+    function validar_paciente($id) {
+        $ci = (int) $id;
+        $conn = $this->conectar();
+        $query = "SELECT * FROM PACIENTE WHERE CI = '".$ci."'";
+        $result = oci_parse($conn, $query);
+        oci_execute($result);
+        return $result;
+    }
+
 
 /*  Funcion que agrega un usuario nuevo en la base
     de datos.
@@ -89,5 +112,37 @@ class fachadaBD {
         $this->desconectar($conexion);
         return $result;
     }
+
+/*  Funcion que agrega un paciente nuevo en la base de datos.
+*/
+    function agregarPacienteBD($objeto) {
+
+		$conexion = $this->conectarBD("ADMIN","1234");
+        #$conexion = $this->conectar($_SESSION['user'], $_SESSION['pass']);
+
+        $result = oci_parse($conexion, "INSERT INTO PACIENTE VALUES (".$objeto->getCI().", '".$objeto->getNombres()."', '".$objeto->getApellidos()."', '".$objeto->getProfesion()."', '".$objeto->getLugarRes()."', to_date('".$objeto->getFechaNac()."', 'YYYY-MM-DD'),'".$objeto->getID_Historial()."','".$objeto->getDiagnostico()."', '".$objeto->getInterQuir()."')");
+        oci_execute($result);
+
+        $this->desconectar($conexion);
+        return $result;
+    }
+
+/*  Funcion que elimina un paciente de la base de datos.
+*/
+    function eliminarPacienteBD($id){
+        $ci = (int) $id;
+        $query = "DELETE FROM PACIENTE WHERE CI='".$ci."'";
+        $conexion = $this->conectarBD("ADMIN","1234");
+        $res = oci_parse($conexion, $query);
+        oci_execute($res);
+        $this->desconectar($conexion);
+
+        return $res;
+    
+    }
 }
+
+
+
+	
 ?>
