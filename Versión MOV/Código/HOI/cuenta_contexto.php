@@ -78,12 +78,92 @@
 	    				<div class="row">
 	    					<div class="col-xs-12 content">
 	    						<h3 class="title">Mis contextos</h3>
-								
+								 <form name="F1"class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+									<div class="form-group">
+										<label class="col-xs-2 control-label">Dominios</label>
+										<div class="col-xs-10">
+											<select name = "dominios">
+												<option value="">--- Seleccione ---</option>
+												<?php 
+													$conn = oci_connect("ADMIN", "1234", "localhost/XE");
+
+													$query= "SELECT nombre FROM DominioDifuso_TAB";
+													$result = oci_parse($conn, $query);
+													oci_execute($result);
+													
+													while($row = oci_fetch_array($result,OCI_BOTH)){
+														echo "<option value=" . $row['NOMBRE'] . ">" . $row['NOMBRE'] . "</option>";
+													}
+
+
+												?>
+
+												
+											</select>
+										</div>
+
+									</div>
+
+                                    <div>
+                                        <button type="submit" class="btn btn-primary" name="submit">Seleccionar</button>
+                                    </div>
+                                    
+								 </form>
+
+
+                                 <form class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    <div class="form-group">
+                                        <label class="col-xs-2 control-label">Dimensiones Contextuales</label>
+                                        <div class="col-xs-10">
+                                            <?php
+                                                $option = isset($_POST['dominios']) ? $_POST['dominios'] : false;
+
+                                                if($option) {
+
+                                                    $conn = oci_connect("ADMIN", "1234", "localhost/XE");
+                                                    $query= "SELECT dimension FROM DependenciaCtx_TAB where domDifuso ='" . htmlspecialchars($_POST['dominios']) . "'";
+                                                    $result = oci_parse($conn, $query);
+                                                    oci_execute($result);
+                                                    
+                                                    while($row = oci_fetch_array($result,OCI_BOTH)) {
+
+                                                        $query_dimCtx= "SELECT usuario, dimension FROM DomDimensionCtx_TAB dd " .
+                                                                        "where (dd.usuario='" .
+                                                                        htmlspecialchars($_SESSION['USERNAME']) .
+                                                                        "' OR dd.usuario='DEFAULT') AND dd.dimension.dimension='" .
+                                                                        htmlspecialchars($row['DIMENSION']) . "'";
+                                                                        
+                                                        $result_dimCtx = oci_parse($conn, $query_dimCtx);
+                                                        //echo $query_dimCtx;
+                                                        oci_execute($result_dimCtx);
+
+                                                        echo "<select name = \"" . $row['DIMENSION'] . "\">";
+                                                        echo "<option selected disabled value=\"\">" . $row['DIMENSION'] . "</option>";
+
+                                                        while($rowCtx = oci_fetch_array($result_dimCtx,OCI_BOTH)){
+                                                            echo "hola";
+                                                            echo "<option value=" . $rowCtx['USUARIO'] . ">" . $rowCtx['USUARIO'] . "</option>";
+                                                        }
+
+                                                        echo "</select>";
+                                                        
+                                                    }
+                                                    
+                                                }
+
+                                            ?>                                                
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary" name="submit">Seleccionar</button>
+                                    </div>
+                                 </form>								
 	    					</div>
 	    				</div>
 	    			</div>
 	    		</div>
     		</div>
+			
     		<!-- FOOTER -->
     		<div class="row footer">
     			<div class="col-xs-12 " style="">
