@@ -21,7 +21,10 @@
 
         <!-- STYLE -->
         <link rel="stylesheet" type="text/css" href="./css/basico.css"/>    </head>
-        <?php session_start(); ?>
+        <?php 
+            session_start(); 
+            include_once ("fachadaBD.php");
+        ?>
     <body>
     	<div class="container-fluid" style="height: 100%;">
     		<!-- TOPBAR -->
@@ -114,38 +117,32 @@
                                  <form class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                                     <div class="form-group">
                                         <label class="col-xs-2 control-label">Dimensiones Contextuales</label>
+                                        <br>
                                         <div class="col-xs-10">
                                             <?php
                                                 $option = isset($_POST['dominios']) ? $_POST['dominios'] : false;
 
                                                 if($option) {
 
-                                                    $conn = oci_connect("ADMIN", "1234", "localhost/XE");
-                                                    $query= "SELECT dimension FROM DependenciaCtx_TAB where domDifuso ='" . htmlspecialchars($_POST['dominios']) . "'";
-                                                    $result = oci_parse($conn, $query);
+                                                    $fdb = fachadaBD::getInstance();
+                                                    $result = $fdb->obtenerDimensionesContextuales($_POST['dominios']);
                                                     oci_execute($result);
                                                     
                                                     while($row = oci_fetch_array($result,OCI_BOTH)) {
 
-                                                        $query_dimCtx= "SELECT usuario, dimension FROM DomDimensionCtx_TAB dd " .
-                                                                        "where (dd.usuario='" .
-                                                                        htmlspecialchars($_SESSION['USERNAME']) .
-                                                                        "' OR dd.usuario='DEFAULT') AND dd.dimension.dimension='" .
-                                                                        htmlspecialchars($row['DIMENSION']) . "'";
-                                                                        
-                                                        $result_dimCtx = oci_parse($conn, $query_dimCtx);
-                                                        //echo $query_dimCtx;
-                                                        oci_execute($result_dimCtx);
+                                                        $result_dimCtx = $fdb->obtenerDominiosDeDimensionContextual($_SESSION['USERNAME'],$row['DIMENSION']);
 
+                                                        echo "<div class=\"col-xs-10\">";
+                                                        echo "<label class=\"col-xs-2 control-label\">" . $row['DIMENSION'] . "</label>";
                                                         echo "<select name = \"" . $row['DIMENSION'] . "\">";
                                                         echo "<option selected disabled value=\"\">" . $row['DIMENSION'] . "</option>";
-
+                                                        
                                                         while($rowCtx = oci_fetch_array($result_dimCtx,OCI_BOTH)){
-                                                            echo "hola";
-                                                            echo "<option value=" . $rowCtx['USUARIO'] . ">" . $rowCtx['USUARIO'] . "</option>";
+                                                            echo "<option value=" . $rowCtx['DOMINIO'] . ">" . $rowCtx['DOMINIO'] . "</option>";
                                                         }
 
                                                         echo "</select>";
+                                                        echo "</div>";
                                                         
                                                     }
                                                     
@@ -153,11 +150,71 @@
 
                                             ?>                                                
                                         </div>
+
+                                        <br>
+
+                                        <div class="col-xs-10">
+                                            <label class="col-xs-2 control-label">Seleccione la validez de contextos</label>
+                                            <select name = "ALWAYS">
+                                                <option selected disabled value="defaultAlways">Parámetro Always</option>
+                                                <option value="0">Válido sólo para este contexto</option>
+                                                <option vlaue="1">Válido para cualquier contexto</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-xs-10">
+                                            Etiqueta:<br>
+                                            <input type="text" name="Etiqueta">
+                                            <br>
+                                            Límite izquierdo de soporte:<br>
+                                            <input type="text" name="A">
+                                            <br>
+                                            Límite izquierdo de núcleo:<br>
+                                            <input type="text" name="B">
+                                            <br>
+                                            Límite derecho de núcleo:<br>
+                                            <input type="text" name="C">
+                                            <br>
+                                            Límite derecho de soporte:<br>
+                                            <input type="text" name="D">
+                                            <br>
+                                        </div>
+
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-primary" name="submit">Seleccionar</button>
                                     </div>
-                                 </form>								
+                                 </form>
+
+                                 <?php
+                                    /*if (isset($_POST['ETIQUETA'])) {
+                                        // Agregar a la lista de dominios de dimensiones contextuales.
+
+                                        $etiqueta = $_POST['ETIQUETA'];
+                                        $limites = array($_POST['A'],$_POST['B'],$_POST['C'],$_POST['D']);
+
+                                        $dominioDifuso = $_POST['dominios'];
+                                        $usuario = $_SESSION['USERNAME'];
+                                        $always = $_POST['ALWAYS'];
+
+                                        // Crear la lista de dominios de dimensiones contextuales
+                                        $fbd = fachadaBD::getInstance();
+                                        $res = $fdb->obtenerDimensionesContextuales($_POST['dominios']);
+
+                                        $listaDimCtx = array();
+                                        $listaDomCtx = array();
+
+                                        while($rowDom = oci_fetch_array($res,OCI_BOTH)) {
+                                            if (isset($_POST[$rowDom['DIMENSION']])) {
+                                                $listaDimCtx[] = $rowDom['DIMENSION']
+                                                $listaDomCtx[] = $_POST[$rowDom['DIMENSION']];
+                                            }
+                                        }
+
+                                        $fdb->insertarNuevoTrapezoide($dominioDifuso, $etiqueta, $listaDomCtx, $listaDimCtx, $limites, $usuario, $always);
+
+                                    }*/
+                                 ?>								
 	    					</div>
 	    				</div>
 	    			</div>

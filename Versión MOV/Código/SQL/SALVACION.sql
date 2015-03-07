@@ -224,6 +224,16 @@ CREATE OR REPLACE PROCEDURE agregarDomDimensionCtx(Usuario IN VARCHAR2, Dimensio
 	END;
 /
 
+CREATE OR REPLACE TYPE ArrCtx AS TABLE OF VARCHAR(20);
+/
+
+CREATE OR REPLACE FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx) RETURN ListaDomDimensionCtx_TYP IS
+	BEGIN
+		INSERT INTO DomDimensionCtx_TAB VALUES ( Usuario, DomDimensionCtx_TYP(DomDimension, Dimension));
+		COMMIT;
+	END;
+/
+
 CREATE OR REPLACE PROCEDURE  definirEtiqueta(var_dominio IN VARCHAR2, etiqueta IN VARCHAR2, 
 																		A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
 																		ctxs IN ListaDomDimensionCtx_TYP, -- Contextos
