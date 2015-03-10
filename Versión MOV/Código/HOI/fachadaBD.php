@@ -140,6 +140,67 @@ class fachadaBD {
         return $res;
     
     }
+
+
+/* Seccion para gestionar contextos y trapezoides
+*/
+    function obtenerDimensionesContextuales($dominioDifuso) {
+        $conexion = $this->conectar();
+        $query = "SELECT dimension FROM DependenciaCtx_TAB where domDifuso ='" . $dominioDifuso . "'";
+        $result = oci_parse($conexion, $query);
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+        return $result;
+
+    }
+
+    function obtenerDominiosDeDimensionContextual($usuario, $dimension) {
+        $conexion = $this->conectar();
+        $query_dimCtx= "SELECT usuario, dd.dimension.dominio as dominio FROM DomDimensionCtx_TAB dd " .
+                        "where (dd.usuario='" . $usuario . 
+                        "' OR dd.usuario='DEFAULT') AND dd.dimension.dimension='" . 
+                        $dimension . "'";
+                                                                        
+        $result_dimCtx = oci_parse($conexion, $query_dimCtx);
+        oci_execute($result_dimCtx);
+        $this->desconectar($conexion);
+
+        return $result_dimCtx;
+
+    }
+
+    function insertarNuevoTrapezoide($dominio, $etiqueta, $listaDomCtx, $listaDimCtx, $limites, $usuario, $always) {
+
+        $conexion = $this->conectar();
+
+        //$procListaContextos = "BEGIN agregarTrapezoide(:dom, :etq, :lstDomCtx, :lstDimCtx, :A, :B, :C, :D, :usr, :alw); END;";
+
+        $procListaContextos = "BEGIN agregarTrapezoide(:dom, :etq, :lstDomCtx, :lstDimCtx); END;"; //, :A, :B, :C, :D, :usr, :alw); END;";
+
+        $result_listaCtx = oci_parse($conexion,$procListaContextos);
+
+        /* 
+            Asignar las variables para llamar al procedimiento de Oracle
+            que se encarga de agregar el trapezoide 
+        */
+
+        oci_bind_array_by_name($result_listaCtx, ':lstDomCtx', $listaDomCtx, 20, 20, SQLT_CHR);
+        oci_bind_array_by_name($result_listaCtx, ':lstDimCtx', $listaDimCtx, 20, 20, SQLT_CHR);
+        oci_bind_by_name($result_listaCtx, ':dom', $dominio);
+        oci_bind_by_name($result_listaCtx, ':etq', $etiqueta);
+        /*oci_bind_by_name($result_listaCtx, ':A', $limites[0]);
+        oci_bind_by_name($result_listaCtx, ':B', $limites[1]);
+        oci_bind_by_name($result_listaCtx, ':C', $limites[2]);
+        oci_bind_by_name($result_listaCtx, ':D', $limites[3]);
+        oci_bind_by_name($result_listaCtx, ':usr', $usuario);
+        oci_bind_by_name($result_listaCtx, ':alw', $always);*/
+
+        oci_execute($result_listaCtx);
+    
+        $this->desconectar($conexion);
+
+    }
 }
 
 

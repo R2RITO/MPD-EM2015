@@ -124,6 +124,8 @@
 
                                                 if($option) {
 
+                                                    echo "<input type=\"hidden\" name=\"domSeleccionado\" value=" . $_POST['dominios'] . ">";
+
                                                     $fdb = fachadaBD::getInstance();
                                                     $result = $fdb->obtenerDimensionesContextuales($_POST['dominios']);
                                                     oci_execute($result);
@@ -178,6 +180,7 @@
                                             Límite derecho de soporte:<br>
                                             <input type="text" name="D">
                                             <br>
+
                                         </div>
 
                                     </div>
@@ -187,33 +190,34 @@
                                  </form>
 
                                  <?php
-                                    /*if (isset($_POST['ETIQUETA'])) {
+                                    if (isset($_POST['Etiqueta'])) {
+
                                         // Agregar a la lista de dominios de dimensiones contextuales.
 
-                                        $etiqueta = $_POST['ETIQUETA'];
+                                        $etiqueta = $_POST['Etiqueta'];
                                         $limites = array($_POST['A'],$_POST['B'],$_POST['C'],$_POST['D']);
 
-                                        $dominioDifuso = $_POST['dominios'];
+                                        $dominioDifuso = $_POST['domSeleccionado'];
                                         $usuario = $_SESSION['USERNAME'];
                                         $always = $_POST['ALWAYS'];
 
                                         // Crear la lista de dominios de dimensiones contextuales
-                                        $fbd = fachadaBD::getInstance();
-                                        $res = $fdb->obtenerDimensionesContextuales($_POST['dominios']);
+                                        $fdb = fachadaBD::getInstance();
+                                        $res = $fdb->obtenerDimensionesContextuales($_POST['domSeleccionado']);
 
                                         $listaDimCtx = array();
                                         $listaDomCtx = array();
 
                                         while($rowDom = oci_fetch_array($res,OCI_BOTH)) {
                                             if (isset($_POST[$rowDom['DIMENSION']])) {
-                                                $listaDimCtx[] = $rowDom['DIMENSION']
+                                                $listaDimCtx[] = $rowDom['DIMENSION'];
                                                 $listaDomCtx[] = $_POST[$rowDom['DIMENSION']];
                                             }
                                         }
 
                                         $fdb->insertarNuevoTrapezoide($dominioDifuso, $etiqueta, $listaDomCtx, $listaDimCtx, $limites, $usuario, $always);
 
-                                    }*/
+                                    }
                                  ?>								
 	    					</div>
 	    				</div>
