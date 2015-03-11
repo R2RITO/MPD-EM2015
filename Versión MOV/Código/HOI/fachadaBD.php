@@ -127,6 +127,20 @@ class fachadaBD {
         return $result;
     }
 
+/*  Funcion que consulta el historial de un paciente en base a su cedula.
+*/
+    function consultarPacienteBD($ci) {
+        $query = "SELECT * FROM Paciente WHERE ci = ".$ci;
+                
+        #$conexion = $this->conectar($_SESSION['user'], $_SESSION['pass']);
+        $conexion = $this->conectarBD("ADMIN","1234");
+        $results = oci_parse($conexion, $query);
+        oci_execute($results);
+        $this->desconectar($conexion);
+
+        return $results;
+    }
+
 /*  Funcion que elimina un paciente de la base de datos.
 */
     function eliminarPacienteBD($id){
@@ -183,8 +197,9 @@ class fachadaBD {
             que se encarga de agregar el trapezoide 
         */
 
-        oci_bind_array_by_name($result_listaCtx, ':listaDomCtx', $listaDomCtx, 20, -1, SQLT_CHR);
-        oci_bind_array_by_name($result_listaCtx, ':listaDimCtx', $listaDimCtx, 20, -1, SQLT_CHR);
+
+        oci_bind_array_by_name($result_listaCtx, ':listaDomCtx', $listaDomCtx, 20, 20, SQLT_CHR);
+        oci_bind_array_by_name($result_listaCtx, ':listaDimCtx', $listaDimCtx, 20, 20, SQLT_CHR);
         oci_bind_by_name($result_listaCtx, ':dom', $dominio);
         oci_bind_by_name($result_listaCtx, ':etq', $etiqueta);
         oci_bind_by_name($result_listaCtx, ':A', $limites[0]);
