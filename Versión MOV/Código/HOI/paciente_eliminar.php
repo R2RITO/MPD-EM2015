@@ -145,7 +145,7 @@
                                         </div>                            
                                     <?php endif; ?>
                                     <div style="text-align: center; margin-top: 30px;">
-                                        <button type="submit" class="btn btn-primary">Agregar</button>
+                                        <button type="submit" class="btn btn-primary">Eliminar</button>
                                         <button type="button" class="btn btn-default" onClick="document.location.href='<?php echo "paciente_nuevo.php" ?>'">Cancelar</button>
                                         </div>
                                     </div>
