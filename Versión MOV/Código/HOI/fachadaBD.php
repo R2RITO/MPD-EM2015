@@ -102,7 +102,7 @@ class fachadaBD {
         $agrego = oci_parse($conexion,'GRANT ALL PRIVILEGES TO '.$user);
         oci_execute($agrego);
 
-        $string = "INSERT INTO USUARIOS VALUES ('".$user."')";
+        $string = "INSERT INTO UsuarioCtx_TAB VALUES ('".$user."')";
         $result = oci_parse($conexion, $string);
         oci_execute($result);
 
@@ -174,9 +174,7 @@ class fachadaBD {
 
         $conexion = $this->conectar();
 
-        //$procListaContextos = "BEGIN agregarTrapezoide(:dom, :etq, :lstDomCtx, :lstDimCtx, :A, :B, :C, :D, :usr, :alw); END;";
-
-        $procListaContextos = "BEGIN agregarTrapezoide(:dom, :etq, :lstDomCtx, :lstDimCtx); END;"; //, :A, :B, :C, :D, :usr, :alw); END;";
+        $procListaContextos = "BEGIN trap.agregarTrapezoide(:dom, :etq, :listaDomCtx, :listaDimCtx, :A, :B, :C, :D, :usr, :alw); END;";
 
         $result_listaCtx = oci_parse($conexion,$procListaContextos);
 
@@ -185,16 +183,16 @@ class fachadaBD {
             que se encarga de agregar el trapezoide 
         */
 
-        oci_bind_array_by_name($result_listaCtx, ':lstDomCtx', $listaDomCtx, 20, 20, SQLT_CHR);
-        oci_bind_array_by_name($result_listaCtx, ':lstDimCtx', $listaDimCtx, 20, 20, SQLT_CHR);
+        oci_bind_array_by_name($result_listaCtx, ':listaDomCtx', $listaDomCtx, 20, -1, SQLT_CHR);
+        oci_bind_array_by_name($result_listaCtx, ':listaDimCtx', $listaDimCtx, 20, -1, SQLT_CHR);
         oci_bind_by_name($result_listaCtx, ':dom', $dominio);
         oci_bind_by_name($result_listaCtx, ':etq', $etiqueta);
-        /*oci_bind_by_name($result_listaCtx, ':A', $limites[0]);
+        oci_bind_by_name($result_listaCtx, ':A', $limites[0]);
         oci_bind_by_name($result_listaCtx, ':B', $limites[1]);
         oci_bind_by_name($result_listaCtx, ':C', $limites[2]);
         oci_bind_by_name($result_listaCtx, ':D', $limites[3]);
         oci_bind_by_name($result_listaCtx, ':usr', $usuario);
-        oci_bind_by_name($result_listaCtx, ':alw', $always);*/
+        oci_bind_by_name($result_listaCtx, ':alw', $always);
 
         oci_execute($result_listaCtx);
     

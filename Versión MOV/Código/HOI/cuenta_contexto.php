@@ -160,7 +160,7 @@
                                             <select name = "ALWAYS">
                                                 <option selected disabled value="defaultAlways">Parámetro Always</option>
                                                 <option value="0">Válido sólo para este contexto</option>
-                                                <option vlaue="1">Válido para cualquier contexto</option>
+                                                <option value="1">Válido para cualquier contexto</option>
                                             </select>
                                         </div>
 

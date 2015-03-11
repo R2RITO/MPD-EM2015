@@ -114,12 +114,13 @@
 					$valido = $fbd->validar_usuario($usuarioDB);
 					if (($row = oci_fetch_array($valido, OCI_ASSOC))) {
 						if($row['CLAVE'] == $clave){
+                            session_start();
 							$_SESSION['USERNAME'] = $row['LOGIN'];
 							$_SESSION['NOMBRE'] = $row['NOMBRE'];
 							$_SESSION['APELLIDO'] = $row['APELLIDO'];
 							$_SESSION['CI'] = $row['CI'];
 							$_SESSION['FISIO'] = $row['FISIO'];
-							header('Location: home.php');                        
+							header('Location: cuenta_informacion.php');                        
 							exit;
 						} else {
 							$claveErr = "Contraseña incorrecta";
