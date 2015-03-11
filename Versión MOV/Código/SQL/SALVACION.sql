@@ -210,6 +210,13 @@ CREATE OR REPLACE PROCEDURE agregarDimensionCtx(Dimension IN VARCHAR2) AS
 	END;
 /
 
+CREATE OR REPLACE PROCEDURE agregarDomDifuso(Dominio IN VARCHAR2) AS
+	BEGIN
+		INSERT INTO DominioDifuso_TAB VALUES (Dominio);
+		COMMIT;
+	END;
+/
+
 CREATE OR REPLACE PROCEDURE agregarDependenciaCtx(Dominio IN VARCHAR2, Dimension IN VARCHAR2) AS
 	BEGIN
 		INSERT INTO DependenciaCtx_TAB VALUES ( Dominio, Dimension );

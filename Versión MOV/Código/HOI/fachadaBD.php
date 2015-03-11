@@ -180,6 +180,17 @@ class fachadaBD {
 
     }
 
+    function obtenerTodosDominiosDifusos() {
+        $conexion = $this->conectar();
+        $query = "SELECT nombre FROM DominioDifuso_TAB";
+        $result = oci_parse($conexion, $query);
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+        return $result;
+
+    }
+
     function agregarDominioDimensionContextual($usuario, $dimCtx, $dominioCtx) {
 
         $conexion = $this->conectar();
@@ -190,6 +201,43 @@ class fachadaBD {
         oci_bind_by_name($result, ':dimCtx', $dimCtx);
         oci_bind_by_name($result, ':domCtx', $dominioCtx);
 
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+    }
+
+    function agregarDominioDifuso($domDifuso) {
+
+        $conexion = $this->conectar();
+        $query = "BEGIN agregarDomDifuso(:dom); END;";
+        $result = oci_parse($conexion, $query);
+
+        oci_bind_by_name($result, ':dom', $domDifuso);
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+    }
+
+    function agregarDependencia($domDifuso, $dimCtx) {
+
+        $conexion = $this->conectar();
+        $query = "BEGIN agregarDependenciaCtx(:dom, :dim); END;";
+        $result = oci_parse($conexion, $query);
+
+        oci_bind_by_name($result, ':dom', $domDifuso);
+        oci_bind_by_name($result, ':dim', $dimCtx);
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+    }
+
+    function agregarDimensionContextual($dimCtx) {
+
+        $conexion = $this->conectar();
+        $query = "BEGIN agregarDimensionCtx(:dim); END;";
+        $result = oci_parse($conexion, $query);
+
+        oci_bind_by_name($result, ':dim', $dimCtx);
         oci_execute($result);
         $this->desconectar($conexion);
 

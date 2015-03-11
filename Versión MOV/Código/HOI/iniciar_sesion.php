@@ -69,7 +69,11 @@
                         $_SESSION['APELLIDO'] = $row['APELLIDO'];
                         $_SESSION['CI'] = $row['CI'];
                         $_SESSION['FISIO'] = $row['FISIO'];
-                        header('Location: cuenta_informacion.php');                        
+                        if ($_SESSION['USERNAME'] == 'ADMIN') {
+                            header('Location: administrador.php');
+                        } else {
+                            header('Location: cuenta_informacion.php');
+                        }
                         exit;
                     } else {
                         $claveErr = "Contraseña incorrecta";

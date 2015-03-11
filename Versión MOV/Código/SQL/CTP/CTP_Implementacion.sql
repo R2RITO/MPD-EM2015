@@ -41,7 +41,7 @@ CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Usuario IN VARCHAR2, Dominio IN VARC
 	CURSOR catCtxDefault IS
 	SELECT  *
 		FROM    CatalogoCtx_TAB
-		WHERE   usuario='ADMIN' AND etiqueta=Etiqueta AND dominio=Dominio AND always=2;
+		WHERE   usuario='DEFAULT' AND etiqueta=Etiqueta AND dominio=Dominio AND always=2;
 
 	CURSOR listaDomDimCtxTrap IS
 	SELECT *

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+        Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <title>Plantilla</title>
+        <meta name="description" content="Plantilla para Hospital Ortopédico Infantil">
+        <meta name="author" content="MOV">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+        <!-- JQUERY -->
+		<script type="text/javascript" src="./jquery/jquery-2.1.3.min.js"></script>
+
+		<!-- BOOTSTRAP -->
+        <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css"/>
+        <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- STYLE -->
+        <link rel="stylesheet" type="text/css" href="./css/basico.css"/>    </head>
+        <?php 
+            session_start();
+            include_once ("fachadaBD.php");
+        ?>
+    <body>
+    	<div class="container-fluid" style="height: 100%;">
+    		<!-- TOPBAR -->
+    		<div class="row topbar">
+    			<div class="col-xs-12">
+    				<!-- LOGO -->
+    				<div class="col-xs-4 logo ">
+    					<img src="./imagenes/logo.jpg" class="img-responsive" alt="Logo">
+    				</div>
+    				<!-- USER PROFILE INFORMATION -->
+    				<div class="col-xs-3 pull-right user-session">    				
+    					<div class="row user-info">
+    						<!-- USER PHOTO -->
+    						<div class="col-xs-3">
+    							<img src="./imagenes/user.png" class="img-responsive" alt="Foto usuario">	
+    						</div>
+    						<!-- USERNAME -->
+    						<div class="col-xs-9">
+    							<h4><?php echo $_SESSION['NOMBRE'] ?></h4>
+    						</div>
+    					</div>
+    					<!-- USER CONTEXT -->
+						<div class="row">
+							<div class="col-xs-12 user-context">
+							</div>
+						</div>
+    				</div>					
+    			</div>
+    		</div>
+    		<!-- MAIN -->
+    		<div class="row main" style="height: 80%;">    			
+    			<div class="row-same-height" style="height: 100%;">
+    				<!-- MAIN MENU -->
+	    			<div class="col-xs-2 col-xs-height col-top main-menu" >
+						<ul class="list-unstyled main-menu">
+							<li class="active"><a href="<?php echo "administrador.php" ?>">Dominios Difusos & Contextos</a></li>
+							<li><a href="<?php echo "admin_trapezoides.php" ?>">Trapezoides</a></li>
+							<li><a href="<?php echo "iniciar_sesion.php" ?>">Salir</a></li>
+						</ul>
+	    			</div>
+	    			<!-- MAIN CONTENT -->
+	    			<div class="col-xs-10 col-xs-height col-top main-content">
+	    				<!-- SUBMENU -->
+	    				<div class="row">
+	    					<div class="col-xs-12 sub-menu">
+								<ul class="list-inline ">
+									<li><a href="<?php echo "administrador.php" ?>">Dominios Difusos</a></li>
+									<li class="active"><a href="<?php echo "admin_dimctx.php" ?>">Dimensiones Contextuales</a></li>
+								</ul>
+	    					</div>
+	    				</div>
+	    				<!-- CONTENT -->
+	    				<div class="row">
+	    					<div class="col-xs-12 content">
+	    						<h3 class="title">Agregar Dimensión Contextual</h3>
+
+                                <form name="F1"class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    <div class="form-group">
+                                        Etiqueta:<br>
+                                        <input type="text" name="Etiqueta">
+                                    </div>
+
+                                    <div>
+                                        <button type="submit" class="btn btn-primary" name="submit">Agregar dimensión</button>
+                                    </div>
+                                    
+                                </form>
+
+                                <h3 class="title">Agregar Dependencia</h3>
+
+                                <form name="F2"class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    <div class="form-group">
+                                        <select name = "dominios">
+                                            <option value="">--- Seleccione ---</option>
+                                            <?php 
+                                                $fdb = fachadaBD::getInstance();
+                                                $result = $fdb->obtenerTodosDominiosDifusos();
+                                                oci_execute($result);
+                                                
+                                                while($row = oci_fetch_array($result,OCI_BOTH)){
+                                                    echo "<option value=" . $row['NOMBRE'] . ">" . $row['NOMBRE'] . "</option>";
+                                                }
+
+
+                                            ?>                                            
+                                        </select>
+
+                                        <select name = "dimensiones">
+                                            <option value="">--- Seleccione ---</option>
+                                            <?php 
+                                                $fdb = fachadaBD::getInstance();
+                                                $result = $fdb->obtenerTodasDimContextuales();
+                                                oci_execute($result);
+                                                
+                                                while($row = oci_fetch_array($result,OCI_BOTH)){
+                                                    echo "<option value=" . $row['NOMBRE'] . ">" . $row['NOMBRE'] . "</option>";
+                                                }
+
+
+                                            ?>                                            
+                                        </select>
+
+                                    </div>
+
+                                    <div>
+                                        <button type="submit" class="btn btn-primary" name="submit">Agregar dependencia</button>
+                                    </div>
+                                    
+                                </form>
+
+
+								
+	    					</div>
+	    				</div>
+
+                        <?php
+                            if (isset($_POST['Etiqueta'])) {
+                                $fdb = fachadaBD::getInstance();
+                                $fdb->agregarDimensionContextual($_POST['Etiqueta']);
+                            } else if (isset($_POST['dominios']) && isset($_POST['dimensiones'])) {
+                                $fdb = fachadaBD::getInstance();
+                                $fdb->agregarDependencia($_POST['dominios'], $_POST['dimensiones']);
+                            }
+                        ?>
+	    			</div>
+	    		</div>
+    		</div>
+    		<!-- FOOTER -->
+    		<div class="row footer">
+    			<div class="col-xs-12 " style="">
+                    <p>© Laboratorio de Marcha | Hospital Ortopédico Infantil </p>   
+                </div>
+    		</div>
+    	</div>
+    </body>
+</html>
