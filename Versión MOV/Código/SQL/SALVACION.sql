@@ -1,4 +1,3 @@
--- MINIPROYECTO ESTEBAN STYLE 
 set serveroutput on
 /* ******************* DOMINIO DIFUSO ******************* */
 

@@ -7,18 +7,11 @@
 	Esteban Oliveros
 	Arturo Voltattorni
 */
-
-CREATE OR REPLACE TYPE DominioDifuso_TYP AS OBJECT (
-	nombre VARCHAR2(50)
-) NOT FINAL
-/
-
-
-CREATE TABLE DominioDifuso_TAB OF DominioDifuso_TYP(
+CREATE TABLE DominioDifuso_TAB (
+	nombre VARCHAR2(50),
 	CONSTRAINT PK_DominioDifuso PRIMARY KEY (nombre)  
 )
 /
-
 
 /* ******************* ATÓMICOS CONTINUOS ******************* */
 

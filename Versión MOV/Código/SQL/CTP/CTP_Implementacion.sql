@@ -6,7 +6,202 @@
 	Arturo Voltattorni
 */
 set serveroutput on
+/* ******************* PROCESOS ******************* */
+
 /* ******************* CAS ******************* */
+
+CREATE OR REPLACE PROCEDURE agregarDimensionCtx(Dimension IN VARCHAR2) AS
+	BEGIN
+		INSERT INTO DimensionCtx_TAB VALUES (Dimension);
+		COMMIT;
+	END;
+/
+
+CREATE OR REPLACE PROCEDURE agregarDomDifuso(Dominio IN VARCHAR2) AS
+	BEGIN
+		INSERT INTO DominioDifuso_TAB VALUES (Dominio);
+		COMMIT;
+	END;
+/
+
+CREATE OR REPLACE PROCEDURE agregarDependenciaCtx(Dominio IN VARCHAR2, Dimension IN VARCHAR2) AS
+	BEGIN
+		INSERT INTO DependenciaCtx_TAB VALUES ( Dominio, Dimension );
+		COMMIT;
+	END;
+/
+
+CREATE OR REPLACE PROCEDURE agregarDomDimensionCtx(Usuario IN VARCHAR2, Dimension IN VARCHAR2, DomDimension IN VARCHAR2) AS
+	BEGIN
+		INSERT INTO DomDimensionCtx_TAB VALUES ( Usuario, DomDimensionCtx_TYP(DomDimension, Dimension));
+		COMMIT;
+	END;
+/
+
+CREATE OR REPLACE PROCEDURE  definirEtiqueta(var_dominio IN VARCHAR2, etiqueta IN VARCHAR2, 
+																		A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
+																		ctxs IN ListaDomDimensionCtx_TYP, -- Contextos
+																		usuario IN VARCHAR2, -- Usuario que define la etiqueta
+																		ALWAYS IN NUMBER) AS
+	-- Permite filtrar los que necesitamos
+	-- NOTA: asumir que en Ctxs se pasan todos los contextos actuales del usuario y por ello hay que filtrarlos, no completarlos
+	CURSOR domCtx IS
+		SELECT  ctx.dominio dom, ctx.dimension dim
+		FROM 	TABLE(ctxs) ctx, DependenciaCtx_TAB dep
+		WHERE dep.domDifuso = var_dominio 
+			AND dep.dimension = ctx.dimension;
+	CURSOR grpCtx IS
+		SELECT ctx.dimensiones dims
+		FROM Contexto_TAB ctx, CatalogoCtx_TAB cat
+		WHERE ctx.id = cat.contexto
+			AND cat.dominio = var_dominio
+			AND cat.usuario = usuario
+			AND cat.etiqueta = etiqueta;
+	CURSOR grpCtx_def IS
+		SELECT ctx.dimensiones dims
+		FROM Contexto_TAB ctx, CatalogoCtx_TAB cat
+		WHERE ctx.id = cat.contexto
+			AND cat.dominio = var_dominio
+			AND cat.usuario = 'DEFAULT'
+			AND cat.etiqueta = etiqueta;
+		
+	list ListaDomDimensionCtx_TYP;
+	k NUMBER;
+	x Contexto_TYP;
+	y Contexto_TYP;
+	existe BOOLEAN;
+	aux VARCHAR2(30000);
+	BEGIN
+			existe := FALSE;
+			k := 1;
+			list := ListaDomDimensionCtx_TYP();
+		IF (ALWAYS = 0) THEN
+			-- Importa para este contexto
+			FOR i IN domCtx LOOP
+				list.EXTEND;
+				list(k) := DomDimensionCtx_TYP(i.dom, i.dim);
+				k := k + 1;
+			END LOOP;
+			x := Contexto_TYP(1,list);
+			FOR i IN grpCtx LOOP
+				existe := existe OR x.esIgual(i.dims);
+			END LOOP;
+
+			IF (existe) THEN
+				DBMS_OUTPUT.PUT_LINE('ESTA REPETIDO!!!'); -- Podriamos realizar una sustitucion del trapezoide
+			ELSE
+				k := CTX_ID.NEXTVAL;
+				INSERT INTO Contexto_TAB VALUES (k, list);
+				INSERT INTO CatalogoCtx_TAB VALUES (usuario, var_dominio, etiqueta, k, 0, Trapezoide_TYP(A,B,C,D));
+			END IF;
+			
+		ELSIF (ALWAYS = 1) THEN
+			-- Importa para el contexto por defecto del usuario
+			FOR i IN domCtx LOOP
+				list.EXTEND;
+				list(k) := DomDimensionCtx_TYP('DEFAULT', i.dim);
+				k := k + 1;
+			END LOOP;		
+			k := CTX_ID.NEXTVAL;
+			INSERT INTO Contexto_TAB VALUES (k, list);
+			INSERT INTO CatalogoCtx_TAB VALUES (usuario, var_dominio, etiqueta, k, 1, Trapezoide_TYP(A,B,C,D));
+
+		ELSIF (ALWAYS = 2) THEN
+			-- Importa para el contexto por defecto de cualquier usuario
+			FOR i IN domCtx LOOP
+				list.EXTEND;
+				list(k) := DomDimensionCtx_TYP('DEFAULT', i.dim);
+				k := k + 1;
+			END LOOP;
+
+			x := Contexto_TYP(1,list);
+			FOR i IN grpCtx_def LOOP
+				existe := existe OR x.esIgual(i.dims);
+			END LOOP;
+			
+			IF (existe) THEN
+				DBMS_OUTPUT.PUT_LINE('ESTA REPETIDO!!!'); -- Podriamos realizar una sustitucion del trapezoide
+			ELSE
+				k := CTX_ID.NEXTVAL;
+				INSERT INTO Contexto_TAB VALUES (k, list);
+				INSERT INTO CatalogoCtx_TAB VALUES ('DEFAULT', var_dominio, etiqueta, k, 2, Trapezoide_TYP(A,B,C,D));
+			END IF;		
+			RETURN;
+		END IF;
+		
+
+	END;
+/
+
+CREATE OR REPLACE PACKAGE trap AS
+
+	TYPE ArrCtx IS TABLE OF VARCHAR(20) INDEX BY BINARY_INTEGER;
+
+	FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx) RETURN ListaDomDimensionCtx_TYP;
+	PROCEDURE  agregarTrapezoide(dom IN VARCHAR2, etq IN VARCHAR2,
+												listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx, -- Contexto
+                                                A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
+                                                usr IN VARCHAR2, -- Usuario que define la etiqueta
+                                                alw IN NUMBER
+                                               );
+
+
+
+END trap;
+/
+
+CREATE OR REPLACE PACKAGE BODY trap AS
+
+
+	FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx) RETURN ListaDomDimensionCtx_TYP IS
+		listaContextos ListaDomDimensionCtx_TYP;
+		tmp DomDimensionCtx_TYP;
+		domActual VARCHAR2(20);
+		dimActual VARCHAR2(20);
+		i NUMBER;
+	BEGIN
+		listaContextos := ListaDomDimensionCtx_TYP();
+		listaContextos.EXTEND(listaDomCtx.COUNT);
+
+		i := 1;
+
+		-- Iterar sobre ambas listas para crear el DomDimensionCtx_TYP
+		-- que se tiene que agregar a listaContextos
+
+		FOR actual in listaDomCtx.first .. listaDomCtx.last LOOP
+
+			IF listaDomCtx(actual) IS NOT NULL THEN
+				tmp := DomDimensionCtx_TYP(listaDomCtx(actual),listaDimCtx(actual));
+
+				listaContextos(i) := tmp;
+				i := i + 1;
+			END IF;
+		END LOOP;
+
+		RETURN listaContextos;
+	END crearListaDomDimCtx;
+
+	PROCEDURE  agregarTrapezoide(dom IN VARCHAR2, etq IN VARCHAR2,
+												listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx, -- Contexto
+                                                A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
+                                                usr IN VARCHAR2, -- Usuario que define la etiqueta
+                                                alw IN NUMBER
+                                               ) IS
+
+		listaContextos ListaDomDimensionCtx_TYP;
+	BEGIN
+
+		listaContextos := crearListaDomDimCtx(listaDomCtx, listaDimCtx);
+		definirEtiqueta(dom, etq, A, B, C, D, listaContextos, usr, alw);
+
+	END agregarTrapezoide;
+
+
+
+END trap;
+
+
+/* ******************* CAR ******************* */ 
 
 CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Usuario IN VARCHAR2, Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, Ctxs IN ListaDomDimensionCtx_TYP) RETURN Trapezoide_TYP IS
 	coincide	BOOLEAN; -- Chequeamos que la lista de contextos coincidan
@@ -116,102 +311,3 @@ CREATE OR REPLACE FUNCTION CatalogoEtiqueta(Usuario IN VARCHAR2, Dominio IN VARC
 	--RETURN NULL;--CA_UserDefault(D1, L1); -- Cambiar por un procedimiento que obtenga los valores por defecto
 END;
 /
-
-	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Valor IN NUMBER) RETURN SELF AS RESULT IS
- 		--BEGIN
-    	--	SELF:= Trapezoide_TYP( Valor, Valor, Valor, Valor);
-    	--RETURN;
- 		--END;
-
-	--CONSTRUCTOR FUNCTION Trapezoide_TYP (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2, NodoA IN NUMBER, NodoB IN NUMBER, NodoC IN NUMBER, NodoD IN NUMBER) RETURN SELF AS RESULT IS
-		--CT_T Trapezoid_Objtyp;
-		--BEGIN
-		--	CA_LinLab(Dominio, Etiqueta, User , NodoA, NodoB, NodoC, NodoD); -- Proceso para insertar en CatalogCtx_TAB
-		--	SELF:= Trapezoid_Objtyp(NodoA, NodoB, NodoC, NodoD);
-		--	RETURN;
-		--END;
-
-/* ******************* CAR ******************* */
-
-
-/*
-CREATE OR REPLACE FUNCTION CA_UserDefault(CT_Domain VARCHAR2, CT_Label VARCHAR2)
-   RETURN Trapezoid_ObjTyp
-is
-  UD_reg UDLinLab_tab%rowtype;
-  User_Def varchar2(10);
-  CT_Trapezoid Trapezoid_Objtyp;
-BEGIN
-   User_Def:=UserDefault();
-   SELECT  * INTO UD_reg
-   FROM    UDLinLab_tab
-   WHERE   User_name=User_Def AND Label=CT_Label AND Dom_name=CT_Domain;
-   RETURN  UD_reg.Trapezoid;
-   EXCEPTION WHEN NO_DATA_FOUND THEN
-      Raise_application_error(-20001,'*** Label: '||CT_Label||', and Domain: '||CT_Domain||', Not Found *** ');
-END;
-/
-
-
-
--- Dado un dominio y una etiqueta retorna el trapezoide almacenado
--- por el usuario actualmente conectado, y de no existir la
--- definicion de este, busca la del usuario por defecto
-CREATE OR REPLACE FUNCTION CA_Trap (CT_Domain VARCHAR2, CT_Label VARCHAR2)
-   RETURN Trapezoid_Objtyp
-is
-  UD_reg UDLinLab_tab%rowtype;
-  CT_T Trapezoid_Objtyp;
-BEGIN
-   SELECT  * INTO UD_reg
-   FROM    UDLinLab_tab
-   WHERE   User_name=user AND Label=CT_Label AND Dom_name=CT_Domain;
-   CT_T:=UD_reg.Trapezoid;
-   RETURN  CT_T;
-   EXCEPTION when NO_DATA_FOUND THEN
-        CT_T:= CA_UserDefault(CT_Domain,CT_Label);
-        RETURN CT_T;
-END;
-/
-
--- Si no encuentra la definicion de la etiqueta en el dominio indicado
--- por el usuario entonces lo crea con los puntos dados
-CREATE OR REPLACE PROCEDURE CA_LinLab (CT_D VARCHAR2, CT_L VARCHAR2, ID_Us VARCHAR2, TA NUMBER, TB NUMBER, TC NUMBER, TD NUMBER)
-is
-Us VARCHAR2(10);
-    BEGIN
-    select User_name into Us
-    from UDLinlab_tab
-    where Label = CT_L and User_name=Id_us And Dom_name=CT_D;
-    EXCEPTION WHEN NO_DATA_FOUND THEN
-      INSERT INTO UDLinLab_tab VALUES (CT_L, Id_Us, CT_D, Trapezoid_objtyp(TA,TB,TC,TD));
-END;
-/
-
--- No tengo idea de que hacen
-CREATE OR REPLACE PROCEDURE CA_Sem_Fijo_Etiq (dom IN VARCHAR2, et IN VARCHAR2, val IN NUMBER, grado IN NUMBER)
-is
-us NUMBER(20);
-    BEGIN
-    SELECT grado INTO us
-    FROM semejanza_fijo_etiqueta
-    WHERE usuario = user AND dom_name = dom AND etiqueta = et AND dominio = val;
-    EXCEPTION WHEN NO_DATA_FOUND THEN
-      INSERT INTO semejanza_fijo_etiqueta VALUES (user, dom, et, val, grado);
-END;
-/
-
-CREATE OR REPLACE PROCEDURE CA_Sem_Etiq (dom IN VARCHAR2, et1 IN VARCHAR2, et2 IN VARCHAR2, grado IN NUMBER)
-is
-us VARCHAR2(20);
-    BEGIN
-    SELECT usuario INTO us
-    FROM semejanza_etiquetas
-    WHERE usuario = user AND dom_name = dom AND ((etiqueta_1 = et1 AND etiqueta_2 = et2) OR (etiqueta_1 = et2 AND etiqueta_2 = et1));
-    EXCEPTION WHEN NO_DATA_FOUND THEN
-      INSERT INTO semejanza_etiquetas VALUES (user, dom, et1, et2, grado);
-END;
-/
-
-
-*/
