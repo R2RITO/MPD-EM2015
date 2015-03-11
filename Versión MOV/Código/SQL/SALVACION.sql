@@ -321,21 +321,25 @@ CREATE OR REPLACE PROCEDURE  definirEtiqueta(var_dominio IN VARCHAR2, etiqueta I
 
 CREATE OR REPLACE PACKAGE trap AS
 
-	TYPE ArrCtx AS TABLE OF VARCHAR2(20);
+	TYPE ArrCtx IS TABLE OF VARCHAR(20) INDEX BY BINARY_INTEGER;
+
 	FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx) RETURN ListaDomDimensionCtx_TYP;
 	PROCEDURE  agregarTrapezoide(dom IN VARCHAR2, etq IN VARCHAR2,
-												listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx -- Contexto
-                                                --A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
-                                                --usr IN VARCHAR2, -- Usuario que define la etiqueta
-                                               -- alw IN NUMBER
+												listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx, -- Contexto
+                                                A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
+                                                usr IN VARCHAR2, -- Usuario que define la etiqueta
+                                                alw IN NUMBER
                                                );
 
 
 
 END trap;
+/
 
-CREATE OR REPLACE FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx) RETURN ListaDomDimensionCtx_TYP IS
+CREATE OR REPLACE PACKAGE BODY trap AS
 
+
+	FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx) RETURN ListaDomDimensionCtx_TYP IS
 		listaContextos ListaDomDimensionCtx_TYP;
 		tmp DomDimensionCtx_TYP;
 		domActual VARCHAR2(20);
@@ -345,40 +349,40 @@ CREATE OR REPLACE FUNCTION crearListaDomDimCtx(listaDomCtx IN ArrCtx, listaDimCt
 		listaContextos := ListaDomDimensionCtx_TYP();
 		listaContextos.EXTEND(listaDomCtx.COUNT);
 
-		domActual := listaDomCtx.first;
-		dimActual := listaDimCtx.first;
 		i := 1;
 
 		-- Iterar sobre ambas listas para crear el DomDimensionCtx_TYP
 		-- que se tiene que agregar a listaContextos
 
-		WHILE domActual is not null LOOP
+		FOR actual in listaDomCtx.first .. listaDomCtx.last LOOP
 
-			tmp := DomDimensionCtx_TYP(domActual,dimActual);
+			IF listaDomCtx(actual) IS NOT NULL THEN
+				tmp := DomDimensionCtx_TYP(listaDomCtx(actual),listaDimCtx(actual));
 
-			listaContextos(i) := tmp;
-			domActual := listaDomCtx.next(domActual);
-			dimActual := listaDimCtx.next(dimActual);
-			i := i + 1;
+				listaContextos(i) := tmp;
+				i := i + 1;
+			END IF;
 		END LOOP;
 
 		RETURN listaContextos;
-	END;
-/
--- Procedimiento llamado desde el front-end que recibe los parametros y crea el trapezoide nuevo.
-CREATE OR REPLACE PROCEDURE  agregarTrapezoide(dom IN VARCHAR2, etq IN VARCHAR2,
-												listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx -- Contexto
-                                                --A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
-                                                --usr IN VARCHAR2, -- Usuario que define la etiqueta
-                                               -- alw IN NUMBER
-                                               ) AS
+	END crearListaDomDimCtx;
+
+	PROCEDURE  agregarTrapezoide(dom IN VARCHAR2, etq IN VARCHAR2,
+												listaDomCtx IN ArrCtx, listaDimCtx IN ArrCtx, -- Contexto
+                                                A IN NUMBER, B IN NUMBER, C IN NUMBER, D IN NUMBER,  -- Trapezoide
+                                                usr IN VARCHAR2, -- Usuario que define la etiqueta
+                                                alw IN NUMBER
+                                               ) IS
 
 		listaContextos ListaDomDimensionCtx_TYP;
 	BEGIN
 
-		--listaContextos := crearListaDomDimCtx(listaDomCtx, listaDimCtx);
-		--definirEtiqueta(dom, etq, A, B, C, D, listaContextos, usr, alw);
-		RETURN;
+		listaContextos := crearListaDomDimCtx(listaDomCtx, listaDimCtx);
+		definirEtiqueta(dom, etq, A, B, C, D, listaContextos, usr, alw);
 
-	END;
+	END agregarTrapezoide;
+
+
+
+END trap;
 /
