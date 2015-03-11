@@ -169,6 +169,32 @@ class fachadaBD {
 
     }
 
+    function obtenerTodasDimContextuales() {
+        $conexion = $this->conectar();
+        $query = "SELECT nombre FROM DimensionCtx_TAB";
+        $result = oci_parse($conexion, $query);
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+        return $result;
+
+    }
+
+    function agregarDominioDimensionContextual($usuario, $dimCtx, $dominioCtx) {
+
+        $conexion = $this->conectar();
+        $query = "BEGIN agregarDomDimensionCtx(:usr,:dimCtx,:domCtx); END;";
+        $result = oci_parse($conexion, $query);
+
+        oci_bind_by_name($result, ':usr', $usuario);
+        oci_bind_by_name($result, ':dimCtx', $dimCtx);
+        oci_bind_by_name($result, ':domCtx', $dominioCtx);
+
+        oci_execute($result);
+        $this->desconectar($conexion);
+
+    }
+
     function obtenerDominiosDeDimensionContextual($usuario, $dimension) {
         $conexion = $this->conectar();
         $query_dimCtx= "SELECT usuario, dd.dimension.dominio as dominio FROM DomDimensionCtx_TAB dd " .

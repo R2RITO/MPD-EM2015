@@ -69,8 +69,9 @@
 	    				<div class="row">
 	    					<div class="col-xs-12 sub-menu">
 								<ul class="list-inline ">
-									<li class="active"><a href=""<?php echo "cuenta_informacion.php" ?>"">Información</a></li>
+									<li class="active"><a href="<?php echo "cuenta_informacion.php" ?>">Información</a></li>
 									<li><a href="<?php echo "cuenta_contexto.php" ?>">Contextos</a></li>
+                                    <li><a href="<?php echo "cuenta_domContextuales.php" ?>">Dominios Contextuales</a></li>
 								</ul>
 	    					</div>
 	    				</div>

@@ -72,15 +72,16 @@
 	    				<div class="row">
 	    					<div class="col-xs-12 sub-menu">
 								<ul class="list-inline ">
-									<li><a href=""<?php echo "cuenta_informacion.php" ?>"">Información</a></li>
+									<li><a href="<?php echo "cuenta_informacion.php" ?>">Información</a></li>
 									<li class="active"><a href=""<?php echo "cuenta_contexto.php" ?>"">Contextos</a></li>
+                                    <li><a href="<?php echo "cuenta_domContextuales.php" ?>">Dominios Contextuales</a></li>
 								</ul>
 	    					</div>
 	    				</div>
 	    				<!-- CONTENT -->
 	    				<div class="row">
 	    					<div class="col-xs-12 content">
-	    						<h3 class="title">Mis contextos</h3>
+	    						<h3 class="title">Agregar nuevo trapezoide</h3>
 								 <form name="F1"class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 									<div class="form-group">
 										<label class="col-xs-2 control-label">Dominios</label>
