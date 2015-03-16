@@ -60,6 +60,7 @@
                         if (count($row)>0){
                             $fbd->eliminarPacienteBD($_POST["ci"]);
                             header('Location: paciente_eliminar.php');
+                        }
                     }
                     
                 }

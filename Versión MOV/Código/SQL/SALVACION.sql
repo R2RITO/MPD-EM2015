@@ -310,7 +310,7 @@ CREATE OR REPLACE PROCEDURE  definirEtiqueta(var_dominio IN VARCHAR2, etiqueta I
 			FOR i IN grpCtx_def LOOP
 				existe := existe OR x.esIgual(i.dims);
 			END LOOP;
-			
+
 			IF (existe) THEN
 				DBMS_OUTPUT.PUT_LINE('ESTA REPETIDO!!!'); -- Podriamos realizar una sustitucion del trapezoide
 			ELSE
