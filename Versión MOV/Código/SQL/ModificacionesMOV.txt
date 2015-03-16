@@ -45,26 +45,6 @@ CAMBIOS RESPECTO A VERSIÓN ANTERIOR
 
 ----------------------------------------------------------------
 
-Tabla mágica: donde va y que tiene :S
-
-¿Trataremos al usuario como contexto diferente? -> En caso de sí, el addContextDependency es tabla nueva, en CTP.
-
-
-Los atributos son fijos, reconsiderar la jerarquía.
-
-Cada vez que se llame al constructor de 4 parametros se creará un nuevo trapezoide?
-En el CA_LinLab actual esto no sucede, pero creo que debería.
-Esto sólo debe ser posible si se le asocian contextos diferentes (Ejemplo de WNL).
-En este caso se deben asociar los dominios de las dimensiones contextuales
-(pre operatorio y eso) al crear el trapezoide. Hasta ahora sólo se busca el usuario.
-
-ALERTA: El UDLinLab_Tab en FDB (que debería ser sólo fuzzy), tiene el usuario
-ahí metido, de hecho el usuario está atravesado en todas partes, problema
-principal: separar contexto (usuario y eso) de difusos, y dónde se une? es decir
-donde va tabla mágica?.
-
-
-
 -------------------------------------------------------------------
 El Usuario se tratará como super contexto, estará presente invariablemente en todos los dominios difusos utilizados.
 
@@ -77,13 +57,3 @@ Para cada entrada en la lista de dom de dim contextuales de un trapezoide (en ca
 cada dominio deberá ser del mismo usuario.
 
 Un usuario no puede utilizar dominios de dim context que no sean definidos por el.
-
--- NOTA: En esto falta agregar los trapezoides con parametro ALWAYS en 2,
--- pero eso luego de agregarse en el catalogo contextual.
--- NOTA 2: Priorizar los definidos por el usuario, y luego los de always 2.
-
-Que tengo que hacer, buscar por trapezoide, si la lista de contextos
-asociados coincide totalmente con la lista provista. (Debe haber sólo un trapezoide así, si es que hay)
-
-Constraint en la lista de contextos como PK para el trapezoide -> Hacer trigger.
-Retornar el trap si lo encuentra, si no user def.

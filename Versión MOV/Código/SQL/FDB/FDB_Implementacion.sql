@@ -57,32 +57,32 @@ CREATE OR REPLACE TYPE BODY Trapezoide_TYP AS
 		T1_a  NUMBER(12,3);
 		T1_b  NUMBER(12,3);
 		BEGIN
-			IF (SELF.T_a= 0 AND SELF.T_b= 0) THEN 
-				S_a:= SELF.T_c;
-				S_b:= SELF.T_c;
+			IF (SELF.A= 0 AND SELF.B= 0) THEN 
+				S_a:= SELF.C;
+				S_b:= SELF.C;
 			ELSE
-				S_a:= SELF.T_a;
-				S_b:= SELF.T_b;
+				S_a:= SELF.A;
+				S_b:= SELF.B;
 			END IF;
 			
-			IF (T1.T_a= 0 AND T1.T_b= 0) THEN 
-				T1_a:= T1.T_c;
-				T1_b:= T1.T_c;
+			IF (T1.A= 0 AND T1.B= 0) THEN 
+				T1_a:= T1.C;
+				T1_b:= T1.C;
 			ELSE
-				T1_a:= T1.T_a;
-				T1_b:= T1.T_b;
+				T1_a:= T1.A;
+				T1_b:= T1.B;
 			END IF;
 
-			IF (SELF.T_a= T1.T_a AND SELF.T_b = T1.T_b AND SELF.T_c= T1.T_c AND SELF.T_d = T1.T_d) THEN 
+			IF (A= T1.A AND B = T1.B AND C= T1.C AND D = T1.D) THEN 
 				FEQR:= 1;  
-			ELSIF (SELF.T_a= T1.T_a AND SELF.T_b = T1.T_b AND ((SELF.T_c<= T1.T_c AND SELF.T_d <= T1.T_d) OR (SELF.T_c>= T1.T_c AND SELF.T_d >= T1.T_d))) THEN 
+			ELSIF (A= T1.A AND B = T1.B AND ((C<= T1.C AND D <= T1.D) OR (C>= T1.C AND D >= T1.D))) THEN 
 				FEQR:= 1;
-			ELSIF (S_a >= T1.T_d OR SELF.T_d <= T1_a) THEN 
+			ELSIF (S_a >= T1.D OR D <= T1_a) THEN 
 				FEQR:= 0;
-			ELSIF (SELF.T_c < T1_b AND SELF.T_d > T1_a) THEN 
-				FEQR:= (SELF.T_d - T1_a)/((T1_b - T1_a)-(SELF.T_c - SELF.T_d));
-			ELSIF  (S_b > T1.T_c AND S_a < T1.T_d) THEN
-				FEQR:= (T1.T_d - S_a)/((S_b - S_a)-(T1.T_c - T1.T_d));
+			ELSIF (C < T1_b AND D > T1_a) THEN 
+				FEQR:= (D - T1_a)/((T1_b - T1_a)-(C - D));
+			ELSIF  (S_b > T1.C AND S_a < T1.D) THEN
+				FEQR:= (T1.D - S_a)/((S_b - S_a)-(T1.C - T1.D));
 			ELSE
 				FEQR:= 1;
 			END IF;
@@ -90,13 +90,16 @@ CREATE OR REPLACE TYPE BODY Trapezoide_TYP AS
 			RETURN FEQR;
 		END;
 
+
 	MEMBER FUNCTION FEQ (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN REAL IS
 		T1 Trapezoide_TYP;
 		BEGIN
 			T1:= CA_Trap(Dominio,Etiqueta); -- Proceso que recupera para este dominio y la etiqueta el trapezoide
 			RETURN SELF.FEQT(T1);
 		END;
+  
 
+  
 	MEMBER FUNCTION LSHOW(Dominio IN VARCHAR2) RETURN VARCHAR2 IS
 		trapezoide Trapezoide_TYP;
 		TYPE CUR_TYP IS REF CURSOR;
@@ -130,7 +133,7 @@ CREATE OR REPLACE TYPE BODY Trapezoide_TYP AS
 			str:= str || '(' || trapezoide.A || ', ' || trapezoide.B || ', ' || trapezoide.C || ', ' || trapezoide.D || ')';
 			RETURN str;
 		END;
-
+  
 END;
 /
 
@@ -265,27 +268,27 @@ MEMBER FUNCTION FEQT (T1 IN Trapezoid_objtyp) RETURN REAL IS
   T1_a  NUMBER(12,3);
   T1_b  NUMBER(12,3);
   BEGIN
-   IF (SELF.T_a= 0 AND SELF.T_b= 0) THEN 
-    S_a:=SELF.T_c;
-    S_b:=SELF.T_c;
+   IF (A= 0 AND B= 0) THEN 
+    S_a:=C;
+    S_b:=C;
     ELSE
-    S_a:=SELF.T_a;
-    S_b:=SELF.T_b;
+    S_a:=A;
+    S_b:=B;
    END IF;
-   IF (T1.T_a= 0 AND T1.T_b= 0) THEN 
-    T1_a:=T1.T_c;
-    T1_b:=T1.T_c;
+   IF (T1.A= 0 AND T1.B= 0) THEN 
+    T1_a:=T1.C;
+    T1_b:=T1.C;
     ELSE
-    T1_a:=T1.T_a;
-    T1_b:=T1.T_b;
+    T1_a:=T1.A;
+    T1_b:=T1.B;
    END IF;
-   IF (SELF.T_a= T1.T_a AND SELF.T_b = T1.T_b AND SELF.T_c= T1.T_c AND SELF.T_d = T1.T_d) THEN FEQR:=1;  
-     ELSIF (SELF.T_a= T1.T_a AND SELF.T_b = T1.T_b AND ((SELF.T_c<= T1.T_c AND SELF.T_d <= T1.T_d) OR (SELF.T_c>= T1.T_c AND SELF.T_d >= T1.T_d))) THEN FEQR:=1;
-       ELSIF (S_a >= T1.T_d OR SELF.T_d <= T1_a) THEN FEQR:=0;
-         ELSIF (SELF.T_c < T1_b AND SELF.T_d > T1_a) THEN 
-           FEQR:=(SELF.T_d - T1_a)/((T1_b - T1_a)-(SELF.T_c - SELF.T_d));
-             ELSIF  (S_b > T1.T_c AND S_a < T1.T_d) THEN
-                FEQR:=(T1.T_d - S_a)/((S_b - S_a)-(T1.T_c - T1.T_d));
+   IF (A= T1.A AND B = T1.B AND C= T1.C AND D = T1.D) THEN FEQR:=1;  
+     ELSIF (A= T1.A AND B = T1.B AND ((C<= T1.C AND D <= T1.D) OR (C>= T1.C AND D >= T1.D))) THEN FEQR:=1;
+       ELSIF (S_a >= T1.D OR D <= T1_a) THEN FEQR:=0;
+         ELSIF (C < T1_b AND D > T1_a) THEN 
+           FEQR:=(D - T1_a)/((T1_b - T1_a)-(C - D));
+             ELSIF  (S_b > T1.C AND S_a < T1.D) THEN
+                FEQR:=(T1.D - S_a)/((S_b - S_a)-(T1.C - T1.D));
               ELSE
                 FEQR:=1;
     END IF;
@@ -329,7 +332,7 @@ MEMBER FUNCTION SHOW RETURN VARCHAR2 IS
    str VARCHAR(60);
  BEGIN
   T:=SELF;
-  str:=str||'('||T.T_A||', '||T.T_B||', '||T.T_C||', '||T.T_D||')';
+  str:=str||'('||T.A||', '||T.B||', '||T.C||', '||T.D||')';
   RETURN str;
  END;
 

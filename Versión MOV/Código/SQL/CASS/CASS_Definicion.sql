@@ -98,7 +98,7 @@ CREATE OR REPLACE TYPE Contexto_TYP AS OBJECT (
 
 CREATE TABLE Contexto_TAB OF Contexto_TYP (
 	CONSTRAINT PK_Contexto PRIMARY KEY (id)
-) NESTED TABLE dimensiones STORE AS ContextoDim_TAB;
+) NESTED TABLE dimensiones STORE AS ContextoDim_TAB
 /
 
 /* ******************* CATÁLOGO ******************* */
@@ -137,5 +137,5 @@ CREATE TABLE JPE_TAB (
 	profesion 		VARCHAR(50), 
 	marcha			VARCHAR(50),
 	CONSTRAINT PK_JPE PRIMARY KEY (id)
-);
+)
 /

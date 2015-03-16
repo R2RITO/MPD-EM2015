@@ -27,7 +27,7 @@ CREATE OR REPLACE TYPE Trapezoide_TYP AS OBJECT (
 )
 /
 
-
+/*
 CREATE OR REPLACE TYPE Continuo_TYP UNDER DominioDifuso_TYP (
 	etiqueta 	VARCHAR2(50),
 	trapezoide 	Trapezoide_TYP,
@@ -36,7 +36,7 @@ CREATE OR REPLACE TYPE Continuo_TYP UNDER DominioDifuso_TYP (
 	MEMBER FUNCTION FEQ (Dominio IN VARCHAR2, Etiqueta IN VARCHAR2) RETURN REAL
 ) NOT FINAL
 /
-
+*/
 
 /*  ATÓMICOS DISCRETOS */
 
