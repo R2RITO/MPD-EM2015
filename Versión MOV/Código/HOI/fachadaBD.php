@@ -247,7 +247,7 @@ class fachadaBD {
         $conexion = $this->conectar();
         $query_dimCtx= "SELECT usuario, dd.dimension.dominio as dominio FROM DomDimensionCtx_TAB dd " .
                         "where (dd.usuario='" . $usuario . 
-                        "' OR dd.usuario='DEFAULT') AND dd.dimension.dimension='" . 
+                        "' OR dd.usuario='ADMIN') AND dd.dimension.dimension='" . 
                         $dimension . "'";
                                                                         
         $result_dimCtx = oci_parse($conexion, $query_dimCtx);

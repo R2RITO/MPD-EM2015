@@ -135,7 +135,64 @@
                                     
                                 </form>
 
+                                <h3 class="title">Agregar Dominio de Dimensión Contextual</h3>
 
+                                <form name="F3"class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    <div class="form-group">
+                                        <label class="col-xs-2 control-label">Dimensiones contextuales</label>
+                                        <div class="col-xs-10">
+                                            <select name = "DIMENSIONES">
+                                                <option value="">--- Seleccione ---</option>
+                                                <?php 
+
+                                                    $fdb = fachadaBD::getInstance();
+                                                    $result = $fdb->obtenerTodasDimContextuales();
+                                                    oci_execute($result);
+                                                    
+                                                    while($row = oci_fetch_array($result,OCI_BOTH)){
+                                                        echo "<option value=" . $row['NOMBRE'] . ">" . $row['NOMBRE'] . "</option>";
+                                                    }
+
+                                                ?>                                                
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <button type="submit" class="btn btn-primary" name="submit">Seleccionar dimensión</button>
+                                    </div>
+                                    
+                                </form>
+
+                                <form class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                                    <div class="form-group">
+                                        <?php
+                                        $option = isset($_POST['DIMENSIONES']) ? $_POST['DIMENSIONES'] : false;
+
+                                        if($option) {  
+                                            echo "<label class=\"col-xs-2 control-label\">Nueva Etiqueta</label>";
+                                            echo "<br>";
+                                            echo "<div class=\"col-xs-10\">";
+
+                                                echo "<input type=\"hidden\" name=\"dimCtx\" value=" . $_POST['DIMENSIONES'] . ">";
+                                                echo "Etiqueta:<br>";
+                                                echo "<input type=\"text\" name=\"Etiqueta_DomDimCtx\">";                                                 
+                                                        
+                                                    
+
+                                                                                              
+                                            echo "</div>";
+
+                                            echo "<br>";
+                                            echo "<div>";
+                                                echo "<button type=\"submit\" class=\"btn btn-primary\" name=\"submit\">Seleccionar</button>";
+                                            echo "</div>";
+
+                                        }
+
+                                        ?>  
+                                    </div>
+                                 </form>
 								
 	    					</div>
 	    				</div>
@@ -147,6 +204,10 @@
                             } else if (isset($_POST['dominios']) && isset($_POST['dimensiones'])) {
                                 $fdb = fachadaBD::getInstance();
                                 $fdb->agregarDependencia($_POST['dominios'], $_POST['dimensiones']);
+                            } else if (isset($_POST['Etiqueta_DomDimCtx'])) {
+                                $fdb = fachadaBD::getInstance();
+                                $fdb->agregarDominioDimensionContextual(
+                                            $_SESSION['USERNAME'],$_POST['dimCtx'],$_POST['Etiqueta_DomDimCtx']);
                             }
                         ?>
 	    			</div>

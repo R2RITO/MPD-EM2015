@@ -128,7 +128,7 @@
                                                     oci_execute($result);
                                                     
                                                     while($row = oci_fetch_array($result,OCI_BOTH)) {
-
+                                                        
                                                         $result_dimCtx = $fdb->obtenerDominiosDeDimensionContextual($_SESSION['USERNAME'],$row['DIMENSION']);
 
                                                         echo "<div class=\"col-xs-10\">";
@@ -206,7 +206,7 @@
                                     }
                                 }
 
-                                $fdb->insertarNuevoTrapezoide($dominioDifuso, $etiqueta, $listaDomCtx, $listaDimCtx, $limites, $usuario, $always);
+                                $fdb->insertarNuevoTrapezoide($dominioDifuso, $etiqueta, $listaDomCtx, $listaDimCtx, $limites, 'PLZ', $always);
 
                             }
                         ?>
